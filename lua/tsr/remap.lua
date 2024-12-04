@@ -16,6 +16,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- tmux sessionizer
 -- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
+-- TODOs
+vim.keymap.set("n", "<leader>td", "<cmd>TodoQuickFix<CR>")
+vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope<CR>")
+
 --_y to copy to clipboard
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
@@ -25,7 +29,16 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 
 --git
 vim.keymap.set("n", "<leader>gs", "<cmd>Git status<CR>")
-vim.keymap.set("n", "<leader>gaa", "<cmd>Git add --all<CR>")
+vim.keymap.set("n", "<leader>gf", function() 
+  vim.cmd("Git fetch origin")
+  print("Fetched latest")
+end)
+vim.keymap.set("n", "<leader>gg", "<cmd>Git pull origin<CR>")
+vim.keymap.set("n", "<leader>gp", "<cmd>Git push origin<CR>")
+vim.keymap.set("n", "<leader>gaa", function()
+  vim.cmd('Git add --all')
+  print('Tracked all changes.')
+end, { desc = "Git add all"})
 vim.keymap.set('n', '<leader>gc', function()
     -- Prompt the user for a commit message
     local commit_message = vim.fn.input('Commit message: ')
