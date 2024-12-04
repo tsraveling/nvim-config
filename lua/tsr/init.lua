@@ -1,2 +1,3 @@
 require("tsr.remap")
-print("hello from tsr")
+require("tsr.set")
+
