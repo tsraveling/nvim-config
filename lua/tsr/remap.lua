@@ -16,6 +16,15 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- tmux sessionizer
 -- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
+-- backspace pops out to filesystem
+vim.keymap.set("n", "<S-BS>", function()
+  vim.cmd("update")
+  vim.cmd("Ex")
+end)
+
+-- save shortcut
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>")
+
 -- TODOs
 vim.keymap.set("n", "<leader>td", "<cmd>TodoQuickFix<CR>")
 vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope<CR>")
