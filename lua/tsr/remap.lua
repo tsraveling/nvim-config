@@ -13,11 +13,15 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
+
 -- tmux sessionizer
 -- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
+-- shoutout
+vim.keymap.set("n", "<leader>so", "<cmd>so<CR>", {desc = "Shout out"})
+
 -- backspace pops out to filesystem
-vim.keymap.set("n", "<S-BS>", function()
+vim.keymap.set("n", "<BS>", function()
   vim.cmd("update")
   vim.cmd("Ex")
 end)
