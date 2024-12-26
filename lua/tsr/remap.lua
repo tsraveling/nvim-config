@@ -13,12 +13,19 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
-
--- tmux sessionizer
--- vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
+-- TODOs in Obsidian (may remove later)
+vim.keymap.set("n", "<leader>mt", "<cmd>OpenTodo<CR>")
+vim.keymap.set("n", "<leader>mn", "<cmd>OpenNotebook<CR>")
+vim.keymap.set("n", "<leader>ml", "<cmd>OpenLearning<CR>")
 
 -- shoutout
 vim.keymap.set("n", "<leader>so", "<cmd>so<CR>", {desc = "Shout out"})
+
+-- clear search = double escape
+vim.keymap.set("n", "<Esc><Esc>", "<cmd>noh<CR>", {desc = "Clear search"})
+
+-- close other panes
+vim.keymap.set("n", "<leader><Esc>", "<cmd>on<CR>")
 
 -- backspace pops out to filesystem
 vim.keymap.set("n", "<BS>", function()
@@ -30,8 +37,18 @@ end)
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>")
 
 -- TODOs
-vim.keymap.set("n", "<leader>td", "<cmd>TodoQuickFix<CR>")
-vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope<CR>")
+vim.keymap.set("n", "<leader>tq", "<cmd>TodoQuickFix<CR>")
+vim.keymap.set("n", "<leader>td", "<cmd>TodoTelescope<CR>")
+vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<CR>")
+
+-- STUBs in the current project (ie, actual current work designation)
+vim.keymap.set("n", "<leader>]", function()
+  require("todo-comments").jump_next({keywords = { "STUB" }})
+end, { desc = "Next stub" })
+
+vim.keymap.set("n", "<leader>[", function()
+  require("todo-comments").jump_prev({keywords = { "STUB" }})
+end, { desc = "Next stub" })
 
 --_y to copy to clipboard
 vim.keymap.set("n", "<leader>y", "\"+y")

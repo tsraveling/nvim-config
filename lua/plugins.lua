@@ -1,5 +1,19 @@
 return {
   {
+    "S1M0N38/love2d.nvim",
+    cmd = "LoveRun",
+    opts = {},
+    keys = {
+      { "<leader>ll",  ft = "lua",          desc = "LÖVE" },
+    },
+  },
+  {
+    "Freedzone/kerbovim"
+  },
+  {
+    'mfussenegger/nvim-dap'
+  },
+  {
     "christoomey/vim-tmux-navigator",
     cmd = {
       "TmuxNavigateLeft",
@@ -20,11 +34,11 @@ return {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
-  },
+      keywords = {
+        STUB = { icon = "築", color = "#FFFF00" },
+      }
+    } -- STUB: Test
+  }, -- TODO: test
   {
     "windwp/nvim-ts-autotag",
     "windwp/nvim-autopairs"
