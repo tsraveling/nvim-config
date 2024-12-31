@@ -1,10 +1,17 @@
 return {
   {
+    'rcarriga/nvim-notify'
+  },
+  {
+    'stevearc/conform.nvim',
+    opts = {},
+  },
+  {
     "S1M0N38/love2d.nvim",
     cmd = "LoveRun",
     opts = {},
     keys = {
-      { "<leader>ll",  ft = "lua",          desc = "LÖVE" },
+      { "<leader>ll", ft = "lua", desc = "LÖVE" },
     },
   },
   {
@@ -36,9 +43,12 @@ return {
     opts = {
       keywords = {
         STUB = { icon = "築", color = "#FFFF00" },
+      },
+      highlight = {
+        multiline = false,
       }
     } -- STUB: Test
-  }, -- TODO: test
+  },  -- TODO: test
   {
     "windwp/nvim-ts-autotag",
     "windwp/nvim-autopairs"
