@@ -1,4 +1,7 @@
 return {
+  {
+    'nvim-tree/nvim-tree.lua'
+  },
   { 'echasnovski/mini.nvim',      version = '*' },
   { 'nvim-tree/nvim-web-devicons' },
   {
@@ -21,23 +24,6 @@ return {
   },
   {
     'mfussenegger/nvim-dap'
-  },
-  {
-    "christoomey/vim-tmux-navigator",
-    cmd = {
-      "TmuxNavigateLeft",
-      "TmuxNavigateDown",
-      "TmuxNavigateUp",
-      "TmuxNavigateRight",
-      "TmuxNavigatePrevious",
-    },
-    keys = {
-      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
-      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-    },
   },
   {
     "folke/todo-comments.nvim",
@@ -116,6 +102,17 @@ return {
       statuscolumn = { enabled = true },
       words = { enabled = true },
       zen = { enabled = false },
+      scratch = {
+        enabled = true,
+        ft = function()
+          if vim.bo.buftype == "" and vim.bo.filetype ~= "" then
+            return vim.bo.filetype
+          end
+          return "markdown"
+        end,
+        root = vim.fn.stdpath("data") .. "/scratch",
+        autowrite = true, -- automatically write when the buffer is hidden
+      },
       styles = {
         notification = {
           -- wo = { wrap = true } -- Wrap notifications

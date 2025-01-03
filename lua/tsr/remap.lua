@@ -30,7 +30,7 @@ vim.keymap.set("n", "<leader><Esc>", "<cmd>on<CR>")
 -- backspace pops out to filesystem
 vim.keymap.set("n", "<BS>", function()
   vim.cmd("update")
-  vim.cmd("Ex")
+  vim.cmd("NvimTreeFindFile")
 end)
 
 -- save shortcut
