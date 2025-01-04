@@ -12,5 +12,7 @@ require("rose-pine").setup({
 })
 vim.cmd("colorscheme rose-pine")
 
+-- Require custom modules
+require("modules")
 
 ColorMyPencils() -- H/T theprimagen!

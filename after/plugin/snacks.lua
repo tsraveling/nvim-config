@@ -15,5 +15,5 @@ vim.keymap.set("n", "<leader>gl", function() Snacks.lazygit.log() end, { desc = 
 vim.keymap.set("n", "<leader>un", function() Snacks.notifier.hide() end, { desc = "Dismiss All Notifications" })
 vim.keymap.set("n", "<c-/>", function() Snacks.terminal() end, { desc = "Toggle Terminal" })
 vim.keymap.set("n", "<c-_>", function() Snacks.terminal() end, { desc = "which_key_ignore" })
-vim.keymap.set({ "n", "t" }, "]]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
-vim.keymap.set({ "n", "t" }, "[[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
+vim.keymap.set({ "n", "t" }, "<leader>]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
+vim.keymap.set({ "n", "t" }, "<leader>[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
