@@ -22,7 +22,7 @@ vim.keymap.set("n", "<leader>ml", "<cmd>OpenLearning<CR>")
 vim.keymap.set("n", "<leader>so", "<cmd>so<CR>", { desc = "Shout out" })
 
 -- clear search = double escape
-vim.keymap.set("n", "<Esc><Esc>", "<cmd>noh<CR>", { desc = "Clear search" })
+vim.keymap.set("n", "<leader>s<Esc>", "<cmd>noh<CR>", { desc = "Clear search" })
 
 -- close other panes
 vim.keymap.set("n", "<leader><Esc>", "<cmd>on<CR>")
@@ -30,7 +30,7 @@ vim.keymap.set("n", "<leader><Esc>", "<cmd>on<CR>")
 -- backspace pops out to filesystem
 vim.keymap.set("n", "<BS>", function()
   vim.cmd("update")
-  vim.cmd("NvimTreeFindFile")
+  require("mini.files").open()
 end)
 
 -- save shortcut

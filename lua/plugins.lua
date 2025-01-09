@@ -1,7 +1,4 @@
 return {
-  {
-    'nvim-tree/nvim-tree.lua'
-  },
   { 'echasnovski/mini.nvim',      version = '*' },
   { 'nvim-tree/nvim-web-devicons' },
   {
