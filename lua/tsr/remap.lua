@@ -22,7 +22,7 @@ vim.keymap.set("n", "<leader>ml", "<cmd>openlearning<cr>")
 vim.keymap.set("n", "<leader>so", "<cmd>so<cr>", { desc = "shout out" })
 
 -- clear search = double escape
-vim.keymap.set("n", "<leader>s<esc>", "<cmd>noh<cr>", { desc = "clear search" })
+vim.keymap.set("n", "<leader>sc", "<cmd>noh<cr>", { desc = "clear search" })
 
 -- close other panes
 vim.keymap.set("n", "<leader><esc>", "<cmd>on<cr>")
@@ -44,39 +44,4 @@ vim.keymap.set("n", "<leader>p", "\"+p")
 vim.keymap.set("v", "<leader>p", "\"+p")
 
 --_x to chmod+x a script from right in here
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })
-
---git
-vim.keymap.set("n", "<leader>gs", "<cmd>git status<cr>")
-vim.keymap.set("n", "<leader>gf", function()
-  vim.cmd("git fetch origin")
-  vim.notify("fetched origin.")
-end)
-vim.keymap.set("n", "<leader>gp", "<cmd>git pull origin<cr>")
-vim.keymap.set("n", "<leader>gp", function()
-  vim.cmd("git push origin")
-end)
-
-vim.keymap.set("n", "<leader>gaa", function()
-  vim.cmd('git add --all')
-  vim.notify("added all files")
-end, { desc = "git add all" })
-vim.keymap.set('n', '<leader>gc', function()
-  -- prompt the user for a commit message
-  vim.ui.input({
-    prompt = "commit message: ",
-  }, function(commit_message)
-    -- esc to cancel
-    if commit_message == nil then
-      return
-    end
-
-    -- Check if a message was actually entered
-    if commit_message ~= '' then
-      -- Use vim.cmd to run the Git commit command
-      vim.cmd('Git commit -m "' .. commit_message .. '"')
-    else
-      vim.notify("No commit message provided.", "error")
-    end
-  end)
-end, { desc = 'Git commit with message' })
+--vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })

@@ -43,42 +43,76 @@ local function toggle_checkbox()
   end
 end
 
+local function find_project_todo()
+  -- Try to find git root first
+  local git_root = vim.fn.system('git rev-parse --show-toplevel 2>/dev/null'):gsub('\n', '')
+
+  -- If we're in a git repo, use that path
+  if vim.v.shell_error == 0 then
+    return git_root .. '/TODO.md'
+  end
+
+  -- Fallback to current working directory
+  return vim.fn.getcwd() .. '/TODO.md'
+end
+
+local function open_todo_window(todo_path)
+  local buf = vim.api.nvim_create_buf(false, false)
+  local win = vim.api.nvim_open_win(buf, true, create_float_config())
+
+  vim.cmd('edit ' .. vim.fn.fnameescape(todo_path))
+
+  -- Set window options
+  vim.wo[win].winblend = 10
+  vim.wo[win].wrap = true
+  vim.wo[win].number = true
+  vim.wo[win].relativenumber = true
+  vim.wo[win].signcolumn = 'yes'
+
+  -- Set markdown filetype
+  vim.cmd('setlocal filetype=markdown')
+
+  -- Add keymaps
+  local loaded_buf = vim.api.nvim_get_current_buf()
+  vim.keymap.set('n', 'q', function()
+    vim.cmd('write')
+    vim.cmd('quit')
+  end, { buffer = loaded_buf })
+
+  vim.keymap.set('n', '<CR>', toggle_checkbox, {
+    desc = "Toggle markdown checkbox",
+    buffer = true
+  })
+end
+
 function M.setup()
   vim.keymap.set('n', '<leader>td', function()
-    -- Get the full path
-    local todo_path = vim.fn.expand('~/notes/todo.md')
+    local todo_path = find_project_todo()
 
-    -- Create an empty scratch buffer first
-    local buf = vim.api.nvim_create_buf(false, false)
+    -- If file doesn't exist, show confirmation
+    if vim.fn.filereadable(todo_path) == 0 then
+      vim.ui.select({ 'Yes', 'No' }, {
+        prompt = 'Create new TODO.md at ' .. todo_path .. '?',
+      }, function(choice)
+        if choice == 'Yes' then
+          -- Create directory if needed
+          local dir = vim.fn.fnamemodify(todo_path, ':h')
+          vim.fn.mkdir(dir, 'p')
 
-    -- Open it in a floating window
-    local win = vim.api.nvim_open_win(buf, true, create_float_config())
-
-    -- Set window options
-    vim.api.nvim_win_set_option(win, 'winblend', 10)
-    vim.api.nvim_win_set_option(win, 'wrap', true)
-    vim.api.nvim_win_set_option(win, 'number', true)
-    vim.api.nvim_win_set_option(win, 'relativenumber', true)
-    vim.api.nvim_win_set_option(win, 'signcolumn', 'yes')
-
-    -- Now use the standard command to edit the file in this window
-    -- This should handle all the normal buffer setup and LSP initialization
-    vim.cmd('edit ' .. vim.fn.fnameescape(todo_path))
-
-    -- Set markdown filetype explicitly after loading
-    vim.cmd('setlocal filetype=markdown')
-
-    -- Add the backspace mapping to the loaded buffer
-    local loaded_buf = vim.api.nvim_get_current_buf()
-    vim.keymap.set('n', '<BS>', function()
-      vim.cmd('write')
-      vim.cmd('quit')
-    end, { buffer = loaded_buf })
-
-    vim.keymap.set('n', '<CR>', toggle_checkbox, {
-      desc = "Toggle markdown checkbox",
-      buffer = true
-    })
+          -- Create empty file
+          local file = io.open(todo_path, 'w')
+          if file then
+            file:write('# Project TODO\n\n')
+            file:close()
+            -- Continue with opening the file
+            open_todo_window(todo_path)
+          end
+        end
+      end)
+    else
+      -- File exists, open it directly
+      open_todo_window(todo_path)
+    end
   end)
 end
 

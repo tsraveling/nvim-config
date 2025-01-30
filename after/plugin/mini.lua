@@ -32,6 +32,6 @@ vim.api.nvim_create_autocmd("User", {
     local buf_id = args.data.buf_id
     -- Tweak left-hand side of mapping to your liking
     vim.keymap.set("n", "-", mini_files.close, { buffer = buf_id })
-    vim.keymap.set("n", "o", gio_open, { buffer = buf_id })
+    vim.keymap.set("n", "<leader>o", gio_open, { buffer = buf_id })
   end,
 })

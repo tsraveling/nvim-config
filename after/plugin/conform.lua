@@ -129,8 +129,7 @@ require("conform").setup({
   },
 })
 
-local do_format = function(sync)
-  --- NOTE: table<formatter, table<config_file>>
+local get_formatters = function()
   local formatters = get_closest_formatter({
     ["biome-check"] = { "biome.json" },
     -- gofmt = { "goimports", "go.mod" },
@@ -138,23 +137,35 @@ local do_format = function(sync)
     prettier = { ".prettierrc", "prettier.config.js" },
     stylua = { "stylua.toml" },
   })
-  if not formatters then
-    print("formatter not found, using lsp")
-    require("conform").format({ async = not sync, lsp_fallback = true })
-  else
-    print("formatted with " .. formatters[1])
-    require("conform").format({ async = not sync, formatters, lsp_fallback = false })
-  end
+  return formatters
 end
 
-vim.api.nvim_create_user_command("Format", do_format, {})
--- STUB: Figure out why this only works on the first save
-local format_group = vim.api.nvim_create_augroup("Format", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = format_group,
-  pattern = "*",
-  callback = function()
-    do_format(true)
-    return true
+-- I can call this function to format my file in real time. I do this with F3 -- used to set this in the
+-- LSP file but moving it here as this is more comprehensive, e.g. if I am using a project with a Prettier
+-- integration.
+vim.api.nvim_create_user_command("Format", function()
+  local formatters = get_formatters()
+  if not formatters then
+    print("formatter not found, using lsp")
+    require("conform").format({ async = true, lsp_fallback = true })
+  else
+    print("formatted with " .. formatters[1])
+    require("conform").format({ async = true, formatters, lsp_fallback = false })
   end
+end, {})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = function(args)
+    local formatters = get_formatters()
+    if not formatters then
+      print("formatter not found, using lsp")
+      require("conform").format({ bufnr = args.buf, lsp_fallback = true })
+    else
+      print("formatted with " .. formatters[1])
+      require("conform").format({ bufnr = args.buf, formatters, lsp_fallback = false })
+    end
+  end,
 })
+
+vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>Format<cr>', { desc = "Format current buffer" })

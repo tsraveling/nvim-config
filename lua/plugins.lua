@@ -1,5 +1,26 @@
 return {
   {
+    'RishabhRD/popfix',
+    'RishabhRD/nvim-cheat.sh'
+  },
+  { "artemave/workspace-diagnostics.nvim" },
+  require('plugins.trouble'),
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
+  },
+  {
     'rmagatti/auto-session',
     lazy = false,
 
@@ -11,7 +32,7 @@ return {
       -- log_level = 'debug',
     }
   },
-  { 'echasnovski/mini.nvim',      version = '*' },
+  { 'echasnovski/mini.nvim',              version = '*' },
   { 'nvim-tree/nvim-web-devicons' },
   {
     'rcarriga/nvim-notify'
