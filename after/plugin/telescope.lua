@@ -5,6 +5,9 @@ vim.keymap.set("n", "<leader>ps", function()
     builtin.grep_string({ search = search });
   end)
 end)
+vim.keymap.set("n", "<leader>pr", function()
+  require 'telescope.builtin'.registers {}
+end)
 vim.keymap.set("n", "<leader>*", function()
   builtin.grep_string()
 end)

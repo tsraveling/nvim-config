@@ -39,9 +39,9 @@ vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
 
---_y to copy to clipboard
-vim.keymap.set("n", "<leader>p", "\"+p")
-vim.keymap.set("v", "<leader>p", "\"+p")
+--_pp to paste from clipboard
+vim.keymap.set("n", "<leader>pp", "\"+p")
+vim.keymap.set("v", "<leader>pp", "\"+p")
 
 --_x to chmod+x a script from right in here
 --vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })

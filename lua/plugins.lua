@@ -3,6 +3,20 @@ return {
     'RishabhRD/popfix',
     'RishabhRD/nvim-cheat.sh'
   },
+  {
+    'simrat39/rust-tools.nvim'
+  },
+  {
+    'glepnir/template.nvim',
+    cmd = { 'Template', 'TemProject' },
+    config = function()
+      require('template').setup({
+        temp_dir = '~/.config/nvim/templates',
+        author = 'Tim Raveling',
+        email = 'tsraveling@gmail.com'
+      })
+    end
+  },
   { "artemave/workspace-diagnostics.nvim" },
   require('plugins.trouble'),
   {
