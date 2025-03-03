@@ -32,7 +32,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-require("mason").setup()
+require("mason").setup({
+  ensure_installed = { "clangd", "clang-format", "codelldb" }
+})
 require("mason-lspconfig").setup {
   ensure_installed = { "lua_ls", "rust_analyzer", "bashls", "arduino_language_server", "clangd", "tailwindcss", "gopls", "ts_ls", "markdown_oxide", "yamlls" },
   handlers = {
@@ -41,6 +43,13 @@ require("mason-lspconfig").setup {
     end,
   },
 }
+
+require 'lspconfig'.clangd.setup({
+  cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
+  init_options = {
+    fallbackFlags = { '-std=c++17' },
+  },
+})
 
 require 'lspconfig'.gdscript.setup {
   name = "godot",
