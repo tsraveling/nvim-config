@@ -1,5 +1,8 @@
 return {
   {
+    'cdelledonne/vim-cmake'
+  },
+  {
     'RishabhRD/popfix',
     'RishabhRD/nvim-cheat.sh'
   },
