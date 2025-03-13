@@ -45,3 +45,45 @@ vim.keymap.set("v", "<leader>pp", "\"+p")
 
 --_x to chmod+x a script from right in here
 --vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })
+
+
+-- C stuff
+
+-- Generate build folder and run cmake in it
+vim.keymap.set('n', '<leader>bg', function()
+  vim.cmd('split')
+  vim.cmd('resize 15')
+  vim.cmd('terminal')
+  vim.cmd([[
+        call feedkeys("mkdir -p ./build\r", 't')
+        call feedkeys("cd build\r", 't')
+        call feedkeys("cmake ..\r", 't')
+    ]])
+  vim.cmd('startinsert')
+end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
+
+-- Run the build
+vim.keymap.set('n', '<leader>bb', function()
+  vim.cmd('split')
+  vim.cmd('resize 15')
+  vim.cmd('terminal')
+  vim.cmd([[
+        call feedkeys("cd build\r", 't')
+        call feedkeys("make\r", 't')
+    ]])
+  vim.cmd('startinsert')
+end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
+
+vim.keymap.set('n', "<leader>br", function()
+  vim.ui.input({ prompt = "Target >" }, function(build_tar)
+    vim.cmd('vsplit')
+    vim.cmd('wincmd L')
+    vim.cmd('vertical resize 80')
+    vim.cmd('terminal')
+    vim.cmd([[
+        call feedkeys("cd build\r", 't')
+    ]])
+    vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
+    vim.cmd('startinsert')
+  end)
+end)
