@@ -21,7 +21,7 @@ vim.keymap.set("n", "<leader>ml", "<cmd>openlearning<cr>")
 -- shoutout
 vim.keymap.set("n", "<leader>so", "<cmd>so<cr>", { desc = "shout out" })
 
--- clear search = double escape
+-- clear search
 vim.keymap.set("n", "<leader>sc", "<cmd>noh<cr>", { desc = "clear search" })
 
 -- close other panes
@@ -82,8 +82,38 @@ vim.keymap.set('n', "<leader>br", function()
     vim.cmd('terminal')
     vim.cmd([[
         call feedkeys("cd build\r", 't')
+        call feedkeys("make\r", 't')
     ]])
     vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
     vim.cmd('startinsert')
   end)
 end)
+
+vim.keymap.set('n', '<leader>cpi', function()
+  vim.ui.input({ prompt = "Filename >" }, function(fnm)
+    -- Get the current cursor position
+    local cursor_pos = vim.api.nvim_win_get_cursor(0)
+    local row = cursor_pos[1]
+
+    -- get def
+    local def_name = string.upper(fnm) .. "_H"
+
+    -- Lines to insert
+    local lines = {
+      "#ifndef " .. def_name,
+      "#define " .. def_name,
+      "",
+      "",
+      "",
+      "#endif // " .. def_name
+    }
+
+    -- Insert lines at the current cursor position
+    vim.api.nvim_buf_set_lines(0, row, row, false, lines)
+
+    -- Move the cursor to the end of the inserted text
+    vim.api.nvim_win_set_cursor(0, { row + #lines - 2, 0 })
+  end)
+end, { desc = "Inserts ifndef for a c++ header file" })
+
+vim.keymap.set('n', '<leader>cf', '<cmd>ClangdSwitchSourceHeader<CR>', { desc = "Switch source - header file" })
