@@ -1,1 +1,2 @@
-require('dap-go').setup()
+require('dap-go').setup({
+})

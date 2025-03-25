@@ -96,6 +96,7 @@ return {
       handlers = {},
       ensure_installed = {
         "codelldb",
+        "buf"
       }
     }
   },
@@ -118,7 +119,10 @@ return {
   {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-    'neovim/nvim-lspconfig'
+  },
+  {
+
+    'neovim/nvim-lspconfig',
   },
   { 'hrsh7th/cmp-nvim-lsp' },
   { 'hrsh7th/nvim-cmp' },
@@ -148,7 +152,7 @@ return {
       local configs = require("nvim-treesitter.configs")
 
       configs.setup({
-        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html" },
+        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "proto" },
         sync_install = false,
         auto_install = true,
         highlight = { enable = true, additional_vim_regex_highlighting = false },
