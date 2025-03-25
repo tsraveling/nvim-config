@@ -82,6 +82,7 @@ vim.keymap.set('n', "<leader>br", function()
     vim.cmd('terminal')
     vim.cmd([[
         call feedkeys("cd build\r", 't')
+        call feedkeys("cmake ..\r", 't')
         call feedkeys("make\r", 't')
     ]])
     vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
