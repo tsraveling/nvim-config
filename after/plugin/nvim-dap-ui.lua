@@ -37,16 +37,12 @@ end
 dap.listeners.before.launch.dapui_config = function()
   dapui.open()
 end
-dap.listeners.before.event_terminated.dapui_config = function()
-  dapui.close()
-end
-dap.listeners.before.event_exited.dapui_config = function()
-  dapui.close()
-end
 
 -- vim.keymap.set("n", "<leader>ch", "<cmd>Cheat<CR>", { desc = "Open Cheat Sheet" })
 vim.keymap.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<CR>", { desc = "Toggle Breakpoint" })
+vim.keymap.set("n", "<leader>d]", "<cmd>DapStepOver<CR>", { desc = "Step Over" })
 vim.keymap.set("n", "<leader>dr", "<cmd>DapContinue<CR>", { desc = "Continue debugging" })
+vim.keymap.set("n", "<F5>", "<cmd>DapContinue<CR>", { desc = "Continue debugging" })
 vim.keymap.set("n", "<leader>dx", function()
   require("dapui").toggle({ reset = true })
 end, { desc = "Toggle DAP ui and reset" })
