@@ -1,5 +1,8 @@
 return {
   {
+    'leoluz/nvim-dap-go'
+  },
+  {
     "sotte/presenting.nvim",
     opts = {
       -- fill in your options here
