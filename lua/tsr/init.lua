@@ -1,5 +1,6 @@
 require("tsr.remap")
 require("tsr.set")
+require("tsr.cpp_stubs")
 
 vim.api.nvim_create_user_command('OpenTodo', function()
   vim.cmd('botright vsplit ~/notes/TODO.md')

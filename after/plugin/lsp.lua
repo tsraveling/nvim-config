@@ -45,9 +45,19 @@ require("mason-lspconfig").setup {
 }
 
 require 'lspconfig'.clangd.setup({
-  cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
+  cmd = {
+    'clangd',
+    '--background-index',
+    '--clang-tidy',
+    '--log=verbose',
+    '--suggest-missing-includes',
+    '--completion-style=detailed',
+    '--header-insertion=iwyu',
+    '--function-arg-placeholders',
+    '--std=c++20'
+  },
   init_options = {
-    fallbackFlags = { '-std=c++17' },
+    fallbackFlags = { '-std=c++20' },
   },
 })
 
@@ -87,5 +97,22 @@ cmp.setup({
     ['<C-n>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    -- Add Tab functionality for jumping between placeholders
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if vim.snippet and vim.snippet.active() then
+        vim.snippet.jump(1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+
+    -- Add Shift-Tab to jump backwards
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if vim.snippet and vim.snippet.active() then
+        vim.snippet.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
   }),
 })
