@@ -69,52 +69,43 @@ vim.keymap.set('n', '<leader>bb', function()
   vim.cmd('terminal')
   vim.cmd([[
         call feedkeys("cd build\r", 't')
+        call feedkeys("cmake ..\r", 't')
         call feedkeys("make\r", 't')
     ]])
   vim.cmd('startinsert')
 end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
 
 vim.keymap.set('n', "<leader>br", function()
-  vim.ui.input({ prompt = "Target >" }, function(build_tar)
+  local is_scons = vim.fn.filereadable('SConstruct') == 1
+  local is_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
+  if is_cmake then
+    vim.ui.input({ prompt = "Target >" }, function(build_tar)
+      vim.cmd('vsplit')
+      vim.cmd('wincmd L')
+      vim.cmd('vertical resize 80')
+      vim.cmd('terminal')
+      vim.cmd([[
+          call feedkeys("cd build\r", 't')
+          call feedkeys("cmake ..\r", 't')
+          call feedkeys("make\r", 't')
+      ]])
+      vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
+      vim.cmd([[call feedkeys("exit\r", 't')]])
+      vim.cmd('startinsert')
+    end)
+  elseif is_scons then
     vim.cmd('vsplit')
     vim.cmd('wincmd L')
     vim.cmd('vertical resize 80')
     vim.cmd('terminal')
     vim.cmd([[
-        call feedkeys("cd build\r", 't')
-        call feedkeys("cmake ..\r", 't')
-        call feedkeys("make\r", 't')
-    ]])
-    vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
+          call feedkeys("scons\r", 't')
+          call feedkeys("exit", 't')
+      ]]) -- scons then type exit but wait for keyboard input
     vim.cmd('startinsert')
-  end)
+  else
+    vim.notify("No cmake or scons in this project.", vim.log.levels.WARN)
+  end
 end)
-
-vim.keymap.set('n', '<leader>cpi', function()
-  vim.ui.input({ prompt = "Filename >" }, function(fnm)
-    -- Get the current cursor position
-    local cursor_pos = vim.api.nvim_win_get_cursor(0)
-    local row = cursor_pos[1]
-
-    -- get def
-    local def_name = string.upper(fnm) .. "_H"
-
-    -- Lines to insert
-    local lines = {
-      "#ifndef " .. def_name,
-      "#define " .. def_name,
-      "",
-      "",
-      "",
-      "#endif // " .. def_name
-    }
-
-    -- Insert lines at the current cursor position
-    vim.api.nvim_buf_set_lines(0, row, row, false, lines)
-
-    -- Move the cursor to the end of the inserted text
-    vim.api.nvim_win_set_cursor(0, { row + #lines - 2, 0 })
-  end)
-end, { desc = "Inserts ifndef for a c++ header file" })
 
 vim.keymap.set('n', '<leader>cf', '<cmd>ClangdSwitchSourceHeader<CR>', { desc = "Switch source - header file" })

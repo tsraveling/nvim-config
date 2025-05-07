@@ -32,17 +32,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-require("mason").setup({
-  ensure_installed = { "clangd", "clang-format", "codelldb" }
-})
-require("mason-lspconfig").setup {
-  ensure_installed = { "lua_ls", "rust_analyzer", "bashls", "arduino_language_server", "clangd", "tailwindcss", "gopls", "ts_ls", "markdown_oxide", "yamlls" },
-  handlers = {
-    function(server_name)
-      require('lspconfig')[server_name].setup({})
-    end,
-  },
-}
+require("mason").setup()
+
+require("mason-lspconfig").setup()
 
 require 'lspconfig'.clangd.setup({
   cmd = {
@@ -63,7 +55,7 @@ require 'lspconfig'.clangd.setup({
 
 require 'lspconfig'.gdscript.setup {
   name = "godot",
-  cmd = vim.lsp.rpc.connect("127.0.0.1", "6005")
+  cmd = vim.lsp.rpc.connect("127.0.0.1", 6005)
 }
 require 'lspconfig'.gdshader_lsp.setup {}
 

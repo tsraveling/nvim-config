@@ -1,5 +1,10 @@
 return {
   {
+    "folke/zen-mode.nvim",
+    opts = {
+    }
+  },
+  {
     'leoluz/nvim-dap-go'
   },
   {
@@ -118,6 +123,7 @@ return {
   },
   {
     "williamboman/mason.nvim",
+  },{
     "williamboman/mason-lspconfig.nvim",
   },
   {
