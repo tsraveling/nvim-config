@@ -16,3 +16,11 @@ vim.cmd("colorscheme rose-pine")
 require("modules")
 
 ColorMyPencils() -- H/T theprimagen!
+
+-- DAT syntax highlighting
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.dat",
+  callback = function()
+    vim.bo.filetype = "dat"
+  end
+})

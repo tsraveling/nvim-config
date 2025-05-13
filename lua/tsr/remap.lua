@@ -75,15 +75,23 @@ vim.keymap.set('n', '<leader>bb', function()
   vim.cmd('startinsert')
 end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
 
+-- Run the software in various environments
 vim.keymap.set('n', "<leader>br", function()
   local is_scons = vim.fn.filereadable('SConstruct') == 1
   local is_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
+  local is_godot = vim.fn.filereadable('project.godot') == 1
+
+  -- Helper function to create terminal window
+  local function create_terminal_window()
+    vim.cmd('vsplit')
+    vim.cmd('wincmd L')
+    vim.cmd('vertical resize 80')
+    vim.cmd('terminal')
+  end
+
   if is_cmake then
     vim.ui.input({ prompt = "Target >" }, function(build_tar)
-      vim.cmd('vsplit')
-      vim.cmd('wincmd L')
-      vim.cmd('vertical resize 80')
-      vim.cmd('terminal')
+      create_terminal_window()
       vim.cmd([[
           call feedkeys("cd build\r", 't')
           call feedkeys("cmake ..\r", 't')
@@ -94,17 +102,21 @@ vim.keymap.set('n', "<leader>br", function()
       vim.cmd('startinsert')
     end)
   elseif is_scons then
-    vim.cmd('vsplit')
-    vim.cmd('wincmd L')
-    vim.cmd('vertical resize 80')
-    vim.cmd('terminal')
+    create_terminal_window()
     vim.cmd([[
           call feedkeys("scons\r", 't')
           call feedkeys("exit", 't')
       ]]) -- scons then type exit but wait for keyboard input
     vim.cmd('startinsert')
+  elseif is_godot then
+    create_terminal_window()
+    vim.cmd([[
+          call feedkeys("godot .\r", 't')
+          call feedkeys("exit", 't')
+      ]]) -- run godot then type exit but wait for keyboard input
+    vim.cmd('startinsert')
   else
-    vim.notify("No cmake or scons in this project.", vim.log.levels.WARN)
+    vim.notify("No cmake, scons, or godot project detected.", vim.log.levels.WARN)
   end
 end)
 
