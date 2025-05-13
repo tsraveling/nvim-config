@@ -75,6 +75,7 @@ vim.keymap.set('n', '<leader>bb', function()
   vim.cmd('startinsert')
 end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
 
+
 -- Run the software in various environments
 vim.keymap.set('n', "<leader>br", function()
   local is_scons = vim.fn.filereadable('SConstruct') == 1
@@ -89,18 +90,28 @@ vim.keymap.set('n', "<leader>br", function()
     vim.cmd('terminal')
   end
 
-  if is_cmake then
-    vim.ui.input({ prompt = "Target >" }, function(build_tar)
-      create_terminal_window()
-      vim.cmd([[
+  local function build_cmake(build_tar)
+    create_terminal_window()
+    vim.cmd([[
           call feedkeys("cd build\r", 't')
           call feedkeys("cmake ..\r", 't')
           call feedkeys("make\r", 't')
       ]])
-      vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
-      vim.cmd([[call feedkeys("exit\r", 't')]])
-      vim.cmd('startinsert')
-    end)
+    vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
+    vim.cmd([[call feedkeys("exit", 't')]])
+    vim.cmd('startinsert')
+  end
+
+  if is_cmake then
+    -- Input the target if it's the first time, then save it
+    if not vim.b.build_target then
+      vim.ui.input({ prompt = "Target >" }, function(build_tar)
+        vim.b.build_target = build_tar
+        build_cmake(build_tar)
+      end)
+    else
+      build_cmake(vim.b.build_target)
+    end
   elseif is_scons then
     create_terminal_window()
     vim.cmd([[
