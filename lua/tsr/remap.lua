@@ -103,14 +103,24 @@ vim.keymap.set('n', "<leader>br", function()
   end
 
   if is_cmake then
-    -- Input the target if it's the first time, then save it
-    if not vim.b.build_target then
+    -- Use current working directory as project identifier
+    local project_id = vim.fn.getcwd()
+
+    -- Use a table to store targets by project
+    if not _G.project_build_targets then
+      _G.project_build_targets = {}
+    end
+
+    -- Check if we have a stored target for this project
+    if not _G.project_build_targets[project_id] then
       vim.ui.input({ prompt = "Target >" }, function(build_tar)
-        vim.b.build_target = build_tar
+        -- Store the target for this project
+        _G.project_build_targets[project_id] = build_tar
         build_cmake(build_tar)
       end)
     else
-      build_cmake(vim.b.build_target)
+      -- Use the stored target
+      build_cmake(_G.project_build_targets[project_id])
     end
   elseif is_scons then
     create_terminal_window()
@@ -132,3 +142,10 @@ vim.keymap.set('n', "<leader>br", function()
 end)
 
 vim.keymap.set('n', '<leader>cf', '<cmd>ClangdSwitchSourceHeader<CR>', { desc = "Switch source - header file" })
+
+-- Quickly jump between methods
+vim.keymap.set('n', '<leader>cm', function()
+  require('telescope.builtin').lsp_document_symbols({
+    symbols = { 'method', 'function', 'constructor', 'destructor' }
+  })
+end, { desc = 'List methods in current file' })
