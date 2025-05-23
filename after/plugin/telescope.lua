@@ -8,6 +8,8 @@ end)
 vim.keymap.set("n", "<leader>pr", function()
   require 'telescope.builtin'.registers {}
 end)
+vim.keymap.set("n", "<leader>pn", builtin.resume, { desc = "Resume last telescope search" })
+
 vim.keymap.set("n", "<leader>*", function()
   builtin.grep_string()
 end)

@@ -17,6 +17,9 @@ require("modules")
 
 ColorMyPencils() -- H/T theprimagen!
 
+-- cut down on the LSP logging -- maybe reenable when we hit the Skald LSP project
+vim.lsp.set_log_level("warn")
+
 -- DAT syntax highlighting
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = "*.dat",
