@@ -114,6 +114,17 @@ function M.setup()
       open_todo_window(todo_path)
     end
   end)
+
+  -- Create autocommand for ALL markdown files, not just the TODO buffer
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "markdown",
+    callback = function()
+      vim.keymap.set('n', '<CR>', toggle_checkbox, {
+        desc = "Toggle markdown checkbox",
+        buffer = true
+      })
+    end,
+  })
 end
 
 return M

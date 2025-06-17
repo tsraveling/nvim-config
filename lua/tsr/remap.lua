@@ -46,6 +46,13 @@ vim.keymap.set("v", "<leader>pp", "\"+p")
 --_x to chmod+x a script from right in here
 --vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })
 
+vim.keymap.set("n", "<leader>wl", function()
+  vim.cmd([[
+      set wrap
+      set linebreak
+  ]])
+end)
+
 
 -- C stuff
 
