@@ -46,7 +46,7 @@ vim.keymap.set("v", "<leader>pp", "\"+p")
 --_x to chmod+x a script from right in here
 --vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<cr>", { silent = true })
 
-vim.keymap.set("n", "<leader>wl", function()
+vim.keymap.set("n", "<leader>lw", function()
   vim.cmd([[
       set wrap
       set linebreak
@@ -158,3 +158,12 @@ vim.keymap.set('n', '<leader>cm', function()
     symbols = { 'method', 'function', 'constructor', 'destructor' }
   })
 end, { desc = 'List methods in current file' })
+
+-- Markdown formatting hotkeys
+vim.keymap.set("i", "<D-b>", "**")
+
+-- Split navigation
+vim.keymap.set('n', '<C-.>', '<C-w>w', { desc = 'Switch to next split' })
+vim.keymap.set('n', '<C-,>', '<C-w>W', { desc = 'Switch to previous split' })
+vim.keymap.set('n', '<leader>sv', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
+vim.keymap.set('n', '<leader>sh', '<cmd>split<CR>', { desc = 'Open vertical split' })

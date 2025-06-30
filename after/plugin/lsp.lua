@@ -18,14 +18,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     local opts = { buffer = event.buf }
 
-    vim.keymap.set('n', '<leader>ci', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-    vim.keymap.set('n', '<leader>k', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-    vim.keymap.set('n', '<leader>cd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-    vim.keymap.set('n', '<leader>cD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-    vim.keymap.set('n', '<leader>co', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_prev() end, opts)
+    vim.keymap.set('n', '<leader>ci', '<cmd>Telescope lsp_implementations<cr>', opts)
+    vim.keymap.set('n', '<leader>cd', '<cmd>Telescope lsp_definitions<cr>', opts)
+    vim.keymap.set('n', '<leader>cD', '<cmd>Telescope lsp_declarations<cr>', opts) -- Note: only available in newer versions
+    vim.keymap.set('n', '<leader>co', '<cmd>Telescope lsp_type_definitions<cr>', opts)
+    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_prev() end, opts)     -- Keep diagnostic navigation as-is
     vim.keymap.set("n", "]d", function() vim.diagnostic.goto_next() end, opts)
-    vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', '<leader>cr', '<cmd>Telescope lsp_references<cr>', opts)
     vim.keymap.set('n', '<leader>cs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
     vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
     vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
