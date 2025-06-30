@@ -33,23 +33,33 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 require("mason").setup()
 
-require("mason-lspconfig").setup()
+require("mason-lspconfig").setup({
+  handlers = {
+    -- Default handler for most servers
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
 
-require 'lspconfig'.clangd.setup({
-  cmd = {
-    'clangd',
-    '--background-index',
-    '--clang-tidy',
-    '--log=verbose',
-    '--suggest-missing-includes',
-    '--completion-style=detailed',
-    '--header-insertion=iwyu',
-    '--function-arg-placeholders',
-    '--std=c++20'
-  },
-  init_options = {
-    fallbackFlags = { '-std=c++20' },
-  },
+    -- Custom handler for clangd with your specific configuration
+    clangd = function()
+      require('lspconfig').clangd.setup({
+        cmd = {
+          'clangd',
+          '--background-index',
+          '--clang-tidy',
+          '--log=verbose',
+          '--suggest-missing-includes',
+          '--completion-style=detailed',
+          '--header-insertion=iwyu',
+          '--function-arg-placeholders',
+          '--std=c++20'
+        },
+        init_options = {
+          fallbackFlags = { '-std=c++20' },
+        },
+      })
+    end,
+  }
 })
 
 require 'lspconfig'.gdscript.setup {
