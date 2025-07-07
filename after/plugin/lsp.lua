@@ -31,6 +31,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+-- Swift-specific keybindings
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'swift',
+  callback = function()
+    local opts = { buffer = true, silent = true }
+
+    -- Xcodebuild plugin keybindings
+    vim.keymap.set('n', '<leader>xb', '<cmd>XcodebuildBuild<cr>', opts)
+    vim.keymap.set('n', '<leader>xr', '<cmd>XcodebuildBuildRun<cr>', opts)
+    vim.keymap.set('n', '<leader>xt', '<cmd>XcodebuildTest<cr>', opts)
+    vim.keymap.set('n', '<leader>xd', '<cmd>XcodebuildSelectDevice<cr>', opts)
+    vim.keymap.set('n', '<leader>xs', '<cmd>XcodebuildSelectScheme<cr>', opts)
+    vim.keymap.set('n', '<leader>xl', '<cmd>XcodebuildToggleLogs<cr>', opts)
+  end,
+})
+
 require("mason").setup()
 
 require("mason-lspconfig").setup({
@@ -67,6 +83,18 @@ require 'lspconfig'.gdscript.setup {
   cmd = vim.lsp.rpc.connect("127.0.0.1", 6005)
 }
 require 'lspconfig'.gdshader_lsp.setup {}
+
+-- Swift LSP configuration
+require 'lspconfig'.sourcekit.setup {
+  cmd = { 'xcrun', 'sourcekit-lsp' },
+  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
+  root_dir = require('lspconfig').util.root_pattern(
+    '*.xcodeproj',
+    '*.xcworkspace',
+    'Package.swift',
+    '.git'
+  ),
+}
 
 local cmp = require('cmp')
 
