@@ -167,3 +167,9 @@ vim.keymap.set('n', '<C-.>', '<C-w>w', { desc = 'Switch to next split' })
 vim.keymap.set('n', '<C-,>', '<C-w>W', { desc = 'Switch to previous split' })
 vim.keymap.set('n', '<leader>sv', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
 vim.keymap.set('n', '<leader>sh', '<cmd>split<CR>', { desc = 'Open vertical split' })
+
+vim.keymap.set('n', '<Tab>', '<C-w>w', { desc = 'Next split' })
+vim.keymap.set('n', '<S-Tab>', '<C-w>W', { desc = 'Previous split' })
+
+-- Turn off weird esc key nav
+vim.keymap.set('n', '<Esc>', '<Nop>', { desc = 'Disable escape' })
