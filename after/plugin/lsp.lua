@@ -44,6 +44,7 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', '<leader>xd', '<cmd>XcodebuildSelectDevice<cr>', opts)
     vim.keymap.set('n', '<leader>xs', '<cmd>XcodebuildSelectScheme<cr>', opts)
     vim.keymap.set('n', '<leader>xl', '<cmd>XcodebuildToggleLogs<cr>', opts)
+    vim.keymap.set('n', '<leader>xc', '<cmd>lua vim.diagnostic.reset()<cr>')
   end,
 })
 
@@ -144,4 +145,15 @@ cmp.setup({
       end
     end, { 'i', 's' }),
   }),
+})
+
+-- Typescript organize imports
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },
+  callback = function()
+    vim.lsp.buf.execute_command({
+      command = "_typescript.organizeImports",
+      arguments = { vim.api.nvim_buf_get_name(0) }
+    })
+  end
 })

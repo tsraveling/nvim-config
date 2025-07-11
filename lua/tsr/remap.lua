@@ -30,10 +30,30 @@ vim.keymap.set("n", "<leader><esc>", "<cmd>on<cr>")
 -- save shortcut
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr>")
 
--- todos
+-- SECTION: Todos
 vim.keymap.set("n", "<leader>tq", "<cmd>TodoQuickFix<cr>")
-vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope<cr>")
+vim.keymap.set("n", "<leader>ta", "<cmd>TodoTelescope<cr>")
+vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope keywords=TODO<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
+vim.keymap.set("n", "<leader>cj", function()
+  require('telescope.builtin').current_buffer_fuzzy_find({
+    default_text = "SECTION:",
+    layout_config = {
+      width = 0.9,
+      height = 0.8,
+    },
+  })
+end)
+
+-- fuzzy finder
+vim.keymap.set("n", "<leader>f", function()
+  require('telescope.builtin').current_buffer_fuzzy_find({
+    layout_config = {
+      width = 0.9,
+      height = 0.8,
+    },
+  })
+end)
 
 --_y to copy to clipboard
 vim.keymap.set("n", "<leader>y", "\"+y")
@@ -150,7 +170,26 @@ vim.keymap.set('n', "<leader>br", function()
   end
 end)
 
-vim.keymap.set('n', '<leader>cf', '<cmd>ClangdSwitchSourceHeader<CR>', { desc = "Switch source - header file" })
+-- Switch between header and source files in c++ (only works with .h and .cpp)
+vim.keymap.set('n', '<leader>cf', function()
+  local current_file = vim.fn.expand('%')
+  local alternate_file
+
+  if current_file:match('%.cpp$') then
+    alternate_file = current_file:gsub('%.cpp$', '.h')
+  elseif current_file:match('%.h$') then
+    alternate_file = current_file:gsub('%.h$', '.cpp')
+  else
+    print('Not a .cpp or .h file')
+    return
+  end
+
+  if vim.fn.filereadable(alternate_file) == 1 then
+    vim.cmd('edit ' .. alternate_file)
+  else
+    print('Alternate file not found: ' .. alternate_file)
+  end
+end, { desc = "Switch source - header file" })
 
 -- Quickly jump between methods
 vim.keymap.set('n', '<leader>cm', function()
@@ -162,7 +201,7 @@ end, { desc = 'List methods in current file' })
 -- Markdown formatting hotkeys
 vim.keymap.set("i", "<D-b>", "**")
 
--- Split navigation
+-- SECTION: Split navigation
 vim.keymap.set('n', '<C-.>', '<C-w>w', { desc = 'Switch to next split' })
 vim.keymap.set('n', '<C-,>', '<C-w>W', { desc = 'Switch to previous split' })
 vim.keymap.set('n', '<leader>sv', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
@@ -171,5 +210,19 @@ vim.keymap.set('n', '<leader>sh', '<cmd>split<CR>', { desc = 'Open vertical spli
 vim.keymap.set('n', '<Tab>', '<C-w>w', { desc = 'Next split' })
 vim.keymap.set('n', '<S-Tab>', '<C-w>W', { desc = 'Previous split' })
 
+-- Restore Ctrl-i functionality (jump forward in jump list)
+vim.keymap.set('n', '<C-i>', '<C-i>', { noremap = true })
+
 -- Turn off weird esc key nav
 vim.keymap.set('n', '<Esc>', '<Nop>', { desc = 'Disable escape' })
+
+-- Copy current file path
+vim.keymap.set('n', '<leader>yf', function()
+  local filepath = vim.fn.expand('%')
+  if filepath == '' then
+    vim.notify('No file in current buffer', vim.log.levels.WARN)
+    return
+  end
+  vim.fn.setreg('+', filepath)
+  vim.notify('Copied to clipboard: ' .. filepath, vim.log.levels.INFO)
+end, { desc = "Copy file path to clipboard" })

@@ -136,12 +136,13 @@ return {
     opts = {
       keywords = {
         STUB = { icon = "築", color = "#FFFF00" },
+        SECTION = { icon = "▶", color = "#00FF00" },
       },
       highlight = {
         multiline = false,
       }
     } -- STUB: Test
-  },  -- TODO: test
+  },  -- SECTION: test
   {
     "windwp/nvim-ts-autotag",
     "windwp/nvim-autopairs"
