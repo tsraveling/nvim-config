@@ -33,6 +33,7 @@ vim.keymap.set("n", "<leader>w", "<cmd>w<cr>")
 -- SECTION: Todos
 vim.keymap.set("n", "<leader>tq", "<cmd>TodoQuickFix<cr>")
 vim.keymap.set("n", "<leader>ta", "<cmd>TodoTelescope<cr>")
+vim.keymap.set("n", "<leader>tf", "<cmd>TodoTelescope keywords=FIXME<cr>")
 vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope keywords=TODO<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
 vim.keymap.set("n", "<leader>cj", function()

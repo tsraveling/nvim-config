@@ -140,9 +140,23 @@ return {
       },
       highlight = {
         multiline = false,
+      },
+      search = {
+        command = "rg",
+        args = {
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--glob=!vendors/**", -- Exclude vendors directory
+          "--glob=!vendor/**", -- Common variations
+          "--glob=!third_party/**"
+        },
+        pattern = [[\b(KEYWORDS):]],
       }
-    } -- STUB: Test
-  },  -- SECTION: test
+    },
+  },
   {
     "windwp/nvim-ts-autotag",
     "windwp/nvim-autopairs"
