@@ -37,12 +37,15 @@ vim.keymap.set("n", "<leader>tf", "<cmd>TodoTelescope keywords=FIXME<cr>")
 vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope keywords=TODO<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
 vim.keymap.set("n", "<leader>cj", function()
-  require('telescope.builtin').current_buffer_fuzzy_find({
+  require('telescope.builtin').live_grep({
+    search_dirs = { vim.fn.expand('%:p') },
     default_text = "SECTION:",
     layout_config = {
-      width = 0.9,
-      height = 0.8,
+      width = 120,
+      height = 20,
     },
+    initial_mode = "normal",
+    path_display = { "hidden" },
   })
 end)
 
@@ -123,11 +126,11 @@ vim.keymap.set('n', "<leader>br", function()
   local function build_cmake(build_tar)
     create_terminal_window()
     vim.cmd([[
-          call feedkeys("cd build\r", 't')
-          call feedkeys("cmake ..\r", 't')
-          call feedkeys("make\r", 't')
-      ]])
-    vim.cmd(string.format('call feedkeys("./%s\\r", "t")', build_tar))
+      call feedkeys("cd build\r", 't')
+      call feedkeys("cmake .. && make && ", 't')
+    ]])
+    vim.cmd(string.format('call feedkeys("./%s", "t")', build_tar))
+    vim.cmd([[call feedkeys("\r", 't')]])
     vim.cmd([[call feedkeys("exit", 't')]])
     vim.cmd('startinsert')
   end

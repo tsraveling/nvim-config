@@ -136,8 +136,8 @@ return {
     opts = {
       keywords = {
         STUB = { icon = "築", color = "#FFFF00" },
-        SECTION = { icon = "▶", color = "#00FF00" },
-      },
+        SECTION = { icon = "▶", color = "#FFFFFF" },
+      }, -- SECTION: Test
       highlight = {
         multiline = false,
       },
@@ -150,7 +150,7 @@ return {
           "--line-number",
           "--column",
           "--glob=!vendors/**", -- Exclude vendors directory
-          "--glob=!vendor/**", -- Common variations
+          "--glob=!vendor/**",  -- Common variations
           "--glob=!third_party/**"
         },
         pattern = [[\b(KEYWORDS):]],
