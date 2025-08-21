@@ -31,23 +31,29 @@ vim.keymap.set("n", "<leader><esc>", "<cmd>on<cr>")
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr>")
 
 -- SECTION: Todos
-vim.keymap.set("n", "<leader>tq", "<cmd>TodoQuickFix<cr>")
+local function quick_search(term)
+  require('telescope.builtin').live_grep({
+    search_dirs = { vim.fn.expand('%:p') },
+    default_text = term,
+    layout_config = {
+      width = 120,
+      height = 20,
+    },
+    path_display = { "hidden" },
+  })
+end
+
+vim.keymap.set("n", "<leader>tQ", "<cmd>TodoQuickFix<cr>")
 vim.keymap.set("n", "<leader>ta", "<cmd>TodoTelescope<cr>")
 vim.keymap.set("n", "<leader>tf", "<cmd>TodoTelescope keywords=FIXME<cr>")
 vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope keywords=TODO<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
 vim.keymap.set("n", "<leader>cj", function()
-  require('telescope.builtin').live_grep({
-    search_dirs = { vim.fn.expand('%:p') },
-    default_text = "SECTION:",
-    layout_config = {
-      width = 120,
-      height = 20,
-    },
-    initial_mode = "normal",
-    path_display = { "hidden" },
-  })
+  local filetype = vim.bo.filetype
+  local search_term = (filetype == "swift") and "mark: " or "section: "
+  quick_search(search_term)
 end)
+vim.keymap.set("n", "<leader>cJ", "<cmd>TodoTelescope keywords=SECTION<cr>")
 
 -- fuzzy finder
 vim.keymap.set("n", "<leader>f", function()
@@ -108,9 +114,8 @@ vim.keymap.set('n', '<leader>bb', function()
   vim.cmd('startinsert')
 end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
 
-
--- Run the software in various environments
-vim.keymap.set('n', "<leader>br", function()
+-- The runner method
+local function run_it(do_log)
   local is_scons = vim.fn.filereadable('SConstruct') == 1
   local is_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
   local is_godot = vim.fn.filereadable('project.godot') == 1
@@ -130,6 +135,9 @@ vim.keymap.set('n', "<leader>br", function()
       call feedkeys("cmake .. && make && ", 't')
     ]])
     vim.cmd(string.format('call feedkeys("./%s", "t")', build_tar))
+    if (do_log) then
+      vim.cmd([[call feedkeys(" > log.txt", 't')]])
+    end
     vim.cmd([[call feedkeys("\r", 't')]])
     vim.cmd([[call feedkeys("exit", 't')]])
     vim.cmd('startinsert')
@@ -157,21 +165,35 @@ vim.keymap.set('n', "<leader>br", function()
     end
   elseif is_scons then
     create_terminal_window()
-    vim.cmd([[
-          call feedkeys("scons\r", 't')
-          call feedkeys("exit", 't')
-      ]]) -- scons then type exit but wait for keyboard input
+    if do_log then
+      vim.cmd('call feedkeys("scons > log.txt\\r", "t")')
+    else
+      vim.cmd('call feedkeys("scons\\r", "t")')
+    end
+    vim.cmd('call feedkeys("exit", "t")')
     vim.cmd('startinsert')
   elseif is_godot then
     create_terminal_window()
-    vim.cmd([[
-          call feedkeys("godot .\r", 't')
-          call feedkeys("exit", 't')
-      ]]) -- run godot then type exit but wait for keyboard input
+    if do_log then
+      vim.cmd('call feedkeys("godot . > log.txt\\r", "t")')
+    else
+      vim.cmd('call feedkeys("godot .\\r", "t")')
+    end
+    vim.cmd('call feedkeys("exit", "t")')
     vim.cmd('startinsert')
   else
     vim.notify("No cmake, scons, or godot project detected.", vim.log.levels.WARN)
   end
+end
+
+-- Run the software in various environments
+vim.keymap.set('n', "<leader>br", function()
+  run_it(false)
+end)
+
+-- Run the software in various environments and log to log.txt
+vim.keymap.set('n', "<leader>bR", function()
+  run_it(true)
 end)
 
 -- Switch between header and source files in c++ (only works with .h and .cpp)
@@ -230,3 +252,31 @@ vim.keymap.set('n', '<leader>yf', function()
   vim.fn.setreg('+', filepath)
   vim.notify('Copied to clipboard: ' .. filepath, vim.log.levels.INFO)
 end, { desc = "Copy file path to clipboard" })
+
+-- SECTION: Transparency
+
+local bg_transparent = true
+
+local function toggle_background()
+  if bg_transparent then
+    vim.cmd("highlight Normal guibg=#1e1e2e") -- Adjust color to match your theme
+    vim.cmd("highlight NonText guibg=#1e1e2e")
+    vim.cmd("highlight SignColumn guibg=#1e1e2e")
+    vim.cmd("highlight EndOfBuffer guibg=#1e1e2e")
+    bg_transparent = false
+    print("Background: Opaque")
+  else
+    vim.cmd("highlight Normal guibg=NONE")
+    vim.cmd("highlight NonText guibg=NONE")
+    vim.cmd("highlight SignColumn guibg=NONE")
+    vim.cmd("highlight EndOfBuffer guibg=NONE")
+    bg_transparent = true
+    print("Background: Transparent")
+  end
+end
+
+-- Map Ctrl+' in all modes
+vim.keymap.set({ 'n', 'i', 'v', 'x', 't' }, '<C-\'>', toggle_background, { desc = 'Toggle background transparency' })
+
+-- Folding
+vim.keymap.set("n", "<leader>z{", 'zfi{', { desc = "Fold in brackets" })

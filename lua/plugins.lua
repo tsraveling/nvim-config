@@ -1,5 +1,9 @@
 return {
   {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
+  },
+  {
     "wojciech-kulik/xcodebuild.nvim",
     dependencies = {
       "nvim-telescope/telescope.nvim",
@@ -137,6 +141,7 @@ return {
       keywords = {
         STUB = { icon = "築", color = "#FFFF00" },
         SECTION = { icon = "▶", color = "#FFFFFF" },
+        MARK = { icon = "▶", color = "#FFFFFF" },
       }, -- SECTION: Test
       highlight = {
         multiline = false,

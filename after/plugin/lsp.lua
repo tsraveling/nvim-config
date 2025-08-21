@@ -31,22 +31,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
--- Swift-specific keybindings
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'swift',
-  callback = function()
-    local opts = { buffer = true, silent = true }
-
-    -- Xcodebuild plugin keybindings
-    vim.keymap.set('n', '<leader>xb', '<cmd>XcodebuildBuild<cr>', opts)
-    vim.keymap.set('n', '<leader>xr', '<cmd>XcodebuildBuildRun<cr>', opts)
-    vim.keymap.set('n', '<leader>xt', '<cmd>XcodebuildTest<cr>', opts)
-    vim.keymap.set('n', '<leader>xd', '<cmd>XcodebuildSelectDevice<cr>', opts)
-    vim.keymap.set('n', '<leader>xs', '<cmd>XcodebuildSelectScheme<cr>', opts)
-    vim.keymap.set('n', '<leader>xl', '<cmd>XcodebuildToggleLogs<cr>', opts)
-    vim.keymap.set('n', '<leader>xc', '<cmd>lua vim.diagnostic.reset()<cr>')
-  end,
-})
+-- Xcodebuild plugin keybindings
+vim.keymap.set('n', '<leader>xb', '<cmd>XcodebuildBuild<cr>', opts)
+vim.keymap.set('n', '<leader>xi', '<cmd>XcodebuildSetup<cr>', opts)
+vim.keymap.set('n', '<leader>xr', '<cmd>XcodebuildBuildRun<cr>', opts)
+vim.keymap.set('n', '<leader>xt', '<cmd>XcodebuildTest<cr>', opts)
+vim.keymap.set('n', '<leader>xd', '<cmd>XcodebuildSelectDevice<cr>', opts)
+vim.keymap.set('n', '<leader>xs', '<cmd>XcodebuildSelectScheme<cr>', opts)
+vim.keymap.set('n', '<leader>xl', '<cmd>XcodebuildToggleLogs<cr>', opts)
+vim.keymap.set('n', '<leader>xc', '<cmd>lua vim.diagnostic.reset()<cr>')
 
 require("mason").setup()
 
@@ -60,6 +53,7 @@ require("mason-lspconfig").setup({
     -- Custom handler for clangd with your specific configuration
     clangd = function()
       require('lspconfig').clangd.setup({
+        filetypes = { "c", "cpp", "objc", "objcpp" },
         cmd = {
           'clangd',
           '--background-index',
@@ -77,6 +71,17 @@ require("mason-lspconfig").setup({
       })
     end,
   }
+})
+
+require('lspconfig').ts_ls.setup({
+  root_dir = function(fname)
+    local util = require('lspconfig.util')
+    local root = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git')(fname)
+    if root then
+      return root
+    end
+    return util.path.dirname(fname)
+  end,
 })
 
 require 'lspconfig'.gdscript.setup {
