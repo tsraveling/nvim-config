@@ -1,5 +1,15 @@
 return {
   {
+    "OmniSharp/omnisharp-vim",
+    ft = 'cs',
+  },
+  {
+    "j-hui/fidget.nvim",
+    opts = {
+      -- options
+    },
+  },
+  {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
@@ -168,9 +178,10 @@ return {
   },
   {
     "williamboman/mason.nvim",
-  }, {
-  "williamboman/mason-lspconfig.nvim",
-},
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+  },
   {
 
     'neovim/nvim-lspconfig',

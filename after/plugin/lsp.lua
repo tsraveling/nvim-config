@@ -94,12 +94,6 @@ require 'lspconfig'.gdshader_lsp.setup {}
 require 'lspconfig'.sourcekit.setup {
   cmd = { 'xcrun', 'sourcekit-lsp' },
   filetypes = { 'swift', 'objective-c', 'objective-cpp' },
-  root_dir = require('lspconfig').util.root_pattern(
-    '*.xcodeproj',
-    '*.xcworkspace',
-    'Package.swift',
-    '.git'
-  ),
 }
 
 local cmp = require('cmp')
