@@ -245,9 +245,9 @@ vim.keymap.set('n', '<C-i>', '<C-i>', { noremap = true })
 -- Turn off weird esc key nav
 vim.keymap.set('n', '<Esc>', '<Nop>', { desc = 'Disable escape' })
 
--- Copy current file path
+-- Copy current file path (relative to project root)
 vim.keymap.set('n', '<leader>yf', function()
-  local filepath = vim.fn.expand('%')
+  local filepath = vim.fn.expand('%:.')
   if filepath == '' then
     vim.notify('No file in current buffer', vim.log.levels.WARN)
     return

@@ -17,7 +17,7 @@ end)
 vim.keymap.set("n", "<leader>pr", function()
   require 'telescope.builtin'.registers {}
 end)
-vim.keymap.set("n", "<leader>pa", function()
+vim.keymap.set("n", "<leader>sa", function()
   vim.ui.input({ prompt = "Grep >" }, function(search)
     builtin.grep_string({
       search = search,
