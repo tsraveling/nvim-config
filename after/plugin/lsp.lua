@@ -2,15 +2,6 @@
 -- This will avoid an annoying layout shift in the screen
 vim.opt.signcolumn = 'yes'
 
--- Add cmp_nvim_lsp capabilities settings to lspconfig
--- This should be executed before you configure any language server
-local lspconfig_defaults = require('lspconfig').util.default_config
-lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lspconfig_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-
 -- This is where you enable features that only work
 -- if there is a language server active in the file
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -43,16 +34,19 @@ vim.keymap.set('n', '<leader>xc', '<cmd>lua vim.diagnostic.reset()<cr>')
 
 require("mason").setup()
 
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 require("mason-lspconfig").setup({
   handlers = {
     -- Default handler for most servers
     function(server_name)
-      require('lspconfig')[server_name].setup({})
+      vim.lsp.config(server_name, {
+        capabilities = capabilities,
+      })
     end,
 
     -- Custom handler for clangd with your specific configuration
     clangd = function()
-      require('lspconfig').clangd.setup({
+      vim.lsp.config('clangd', {
         filetypes = { "c", "cpp", "objc", "objcpp" },
         cmd = {
           'clangd',
@@ -65,7 +59,7 @@ require("mason-lspconfig").setup({
           '--function-arg-placeholders',
           '--std=c++20'
         },
-        init_options = {
+        settings = {
           fallbackFlags = { '-std=c++20' },
         },
       })
@@ -73,28 +67,27 @@ require("mason-lspconfig").setup({
   }
 })
 
-require('lspconfig').ts_ls.setup({
-  root_dir = function(fname)
-    local util = require('lspconfig.util')
-    local root = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git')(fname)
-    if root then
-      return root
-    end
-    return util.path.dirname(fname)
-  end,
+-- TypeScript/JavaScript LSP
+vim.lsp.config('ts_ls', {
+  root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+  capabilities = capabilities,
 })
 
-require 'lspconfig'.gdscript.setup {
+-- Godot LSP
+vim.lsp.config('gdscript', {
   name = "godot",
-  cmd = vim.lsp.rpc.connect("127.0.0.1", 6005)
-}
-require 'lspconfig'.gdshader_lsp.setup {}
+  cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+  capabilities = capabilities,
+})
+
+vim.lsp.config('gdshader_lsp', {})
 
 -- Swift LSP configuration
-require 'lspconfig'.sourcekit.setup {
+vim.lsp.config('sourcekit', {
   cmd = { 'xcrun', 'sourcekit-lsp' },
   filetypes = { 'swift', 'objective-c', 'objective-cpp' },
-}
+  capabilities = capabilities,
+})
 
 local cmp = require('cmp')
 
