@@ -233,8 +233,8 @@ vim.keymap.set("i", "<D-b>", "**")
 -- SECTION: Split navigation
 vim.keymap.set('n', '<C-.>', '<C-w>w', { desc = 'Switch to next split' })
 vim.keymap.set('n', '<C-,>', '<C-w>W', { desc = 'Switch to previous split' })
-vim.keymap.set('n', '<leader>sv', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
-vim.keymap.set('n', '<leader>sh', '<cmd>split<CR>', { desc = 'Open vertical split' })
+vim.keymap.set('n', '<leader>/v', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
+vim.keymap.set('n', '<leader>/h', '<cmd>split<CR>', { desc = 'Open horizontal split' })
 
 vim.keymap.set('n', '<Tab>', '<C-w>w', { desc = 'Next split' })
 vim.keymap.set('n', '<S-Tab>', '<C-w>W', { desc = 'Previous split' })

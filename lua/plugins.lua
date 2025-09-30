@@ -59,9 +59,6 @@ return {
     'RishabhRD/nvim-cheat.sh'
   },
   {
-    'simrat39/rust-tools.nvim'
-  },
-  {
     'glepnir/template.nvim',
     cmd = { 'Template', 'TemProject' },
     config = function()
@@ -212,7 +209,7 @@ return {
       local configs = require("nvim-treesitter.configs")
 
       configs.setup({
-        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "proto", "markdown" },
+        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "proto", "markdown"},
         sync_install = false,
         auto_install = true,
         highlight = { enable = true, additional_vim_regex_highlighting = false },

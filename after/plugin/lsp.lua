@@ -88,6 +88,7 @@ vim.lsp.config('sourcekit', {
   filetypes = { 'swift', 'objective-c', 'objective-cpp' },
   capabilities = capabilities,
 })
+vim.lsp.enable('sourcekit')
 
 local cmp = require('cmp')
 
