@@ -25,7 +25,10 @@ return {
     },
     config = function()
       require("xcodebuild").setup({
-        -- put some options here or leave it empty to use default settings
+        compile_commands = {
+          enabled = true,
+          use_nvim_lsp_config = true,
+        },
       })
     end,
   },
@@ -209,7 +212,7 @@ return {
       local configs = require("nvim-treesitter.configs")
 
       configs.setup({
-        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "proto", "markdown"},
+        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "proto", "markdown" },
         sync_install = false,
         auto_install = true,
         highlight = { enable = true, additional_vim_regex_highlighting = false },

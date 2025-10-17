@@ -231,10 +231,16 @@ end, { desc = 'List methods in current file' })
 vim.keymap.set("i", "<D-b>", "**")
 
 -- SECTION: Split navigation
-vim.keymap.set('n', '<C-.>', '<C-w>w', { desc = 'Switch to next split' })
-vim.keymap.set('n', '<C-,>', '<C-w>W', { desc = 'Switch to previous split' })
 vim.keymap.set('n', '<leader>/v', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
 vim.keymap.set('n', '<leader>/h', '<cmd>split<CR>', { desc = 'Open horizontal split' })
+
+vim.keymap.set('n', '<leader>/x', function()
+  vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
+end, { desc = 'Set all panes transparent' })
+
+vim.keymap.set('n', '<leader>/n', function()
+  vim.api.nvim_set_hl(0, 'NormalNC', { bg = '#1e1e2e' })
+end, { desc = 'Set all panes normal' })
 
 vim.keymap.set('n', '<Tab>', '<C-w>w', { desc = 'Next split' })
 vim.keymap.set('n', '<S-Tab>', '<C-w>W', { desc = 'Previous split' })
@@ -264,6 +270,7 @@ local function toggle_background()
   if bg_transparent then
     vim.cmd("highlight Normal guibg=#1e1e2e") -- Adjust color to match your theme
     vim.cmd("highlight NonText guibg=#1e1e2e")
+    vim.cmd("highlight NormalNC guibg=#1e1e2e")
     vim.cmd("highlight SignColumn guibg=#1e1e2e")
     vim.cmd("highlight EndOfBuffer guibg=#1e1e2e")
     bg_transparent = false
@@ -271,6 +278,7 @@ local function toggle_background()
   else
     vim.cmd("highlight Normal guibg=NONE")
     vim.cmd("highlight NonText guibg=NONE")
+    vim.cmd("highlight NormalNC guibg=NONE")
     vim.cmd("highlight SignColumn guibg=NONE")
     vim.cmd("highlight EndOfBuffer guibg=NONE")
     bg_transparent = true
@@ -283,3 +291,27 @@ vim.keymap.set({ 'n', 'i', 'v', 'x', 't' }, '<C-\'>', toggle_background, { desc 
 
 -- Folding
 vim.keymap.set("n", "<leader>z{", 'zfi{', { desc = "Fold in brackets" })
+
+-- SECTION: DEBUG NAV
+
+vim.opt.grepprg = 'rg --vimgrep --smart-case --follow'
+vim.opt.grepformat = '%f:%l:%c:%m'
+
+vim.keymap.set('n', '<C-.>', function()
+  pcall(vim.cmd, 'cnext')
+end, { desc = 'Qflist next' })
+
+vim.keymap.set('n', '<C-,>', function()
+  pcall(vim.cmd, 'cprev')
+end, { desc = 'Qflist next' })
+
+vim.keymap.set('n', '<leader>>', function()
+  vim.cmd([[silent! grep '>>>']])
+  local qf_size = vim.fn.getqflist({ size = 0 }).size
+  print('Added ' .. qf_size .. ' instances of >>> to QFList')
+  if qf_size > 0 then
+    vim.cmd('cfirst')
+  else
+    print('No instances of >>> found')
+  end
+end, { noremap = true, silent = true, desc = 'Search for >>> in codebase' })
