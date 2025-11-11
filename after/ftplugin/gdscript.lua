@@ -3,3 +3,15 @@ vim.bo.expandtab = false      -- Pressing the TAB key will insert spaces instead
 vim.bo.softtabstop = 4        -- Number of spaces inserted instead of a TAB character
 vim.bo.shiftwidth = 4         -- Number of spaces inserted when indenting
 vim.bo.commentstring = "# %s" -- add comment support
+
+local ok, err = pcall(function()
+  vim.lsp.enable('gdscript')
+end)
+
+if not ok then
+  vim.notify(
+    "Failed to connect to Godot LSP.",
+    vim.log.levels.ERROR,
+    { title = "LSP Error" }
+  )
+end

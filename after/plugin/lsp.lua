@@ -78,6 +78,13 @@ vim.lsp.config('gdscript', {
   name = "godot",
   cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
   capabilities = capabilities,
+  on_attach = function(client, bufnr)
+    vim.notify(
+      string.format("Godot LSP connected successfully (client: %s)", client.name),
+      vim.log.levels.INFO,
+      { title = "LSP" }
+    )
+  end,
 })
 
 vim.lsp.config('gdshader_lsp', {})

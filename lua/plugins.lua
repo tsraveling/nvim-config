@@ -1,4 +1,5 @@
 return {
+  { 'romariorobby/taskell.nvim' },
   {
     "OmniSharp/omnisharp-vim",
     ft = 'cs',
@@ -101,7 +102,7 @@ return {
       -- log_level = 'debug',
     }
   },
-  { 'echasnovski/mini.nvim',              version = '*' },
+  { 'echasnovski/mini.nvim',      version = '*' },
   { 'nvim-tree/nvim-web-devicons' },
   {
     'rcarriga/nvim-notify'

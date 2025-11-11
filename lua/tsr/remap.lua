@@ -51,6 +51,11 @@ vim.keymap.set("n", "<leader>ta", "<cmd>TodoTelescope<cr>")
 vim.keymap.set("n", "<leader>tf", "<cmd>TodoTelescope keywords=FIXME<cr>")
 vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope keywords=TODO<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
+
+-- Taskell TODO
+vim.keymap.set("n", "<leader>tm", "<cmd>Taskell ~/notes/taskell/Main.md<cr>")
+
+
 vim.keymap.set("n", "<leader>cj", function()
   local filetype = vim.bo.filetype
   local search_term = (filetype == "swift") and "mark: " or "section: "
@@ -86,8 +91,18 @@ vim.keymap.set("n", "<leader>lw", function()
   ]])
 end)
 
+-- SECTION: External apps
 
--- C stuff
+vim.keymap.set('n', '<leader>of', function()
+  if vim.fn.has('mac') == 1 then
+    local current_dir = vim.fn.expand('%:p:h') -- Get directory of current buffer
+    vim.fn.system(string.format('open "%s"', current_dir))
+  else
+    vim.notify("This command only works on macOS", vim.log.levels.ERROR)
+  end
+end, { desc = "Open current file location in Finder" })
+
+-- SECTION: Building and running
 
 -- Generate build folder and run cmake in it
 vim.keymap.set('n', '<leader>bg', function()
@@ -101,6 +116,7 @@ vim.keymap.set('n', '<leader>bg', function()
     ]])
   vim.cmd('startinsert')
 end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
+
 
 -- Run the build
 vim.keymap.set('n', '<leader>bb', function()
@@ -122,6 +138,8 @@ local function run_it(do_log)
   local is_scons = vim.fn.filereadable('SConstruct') == 1
   local is_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
   local is_godot = vim.fn.filereadable('project.godot') == 1
+  local is_sh = vim.bo.filetype == 'sh' or vim.bo.filetype == 'zsh'
+
 
   -- Helper function to create terminal window
   local function create_terminal_window()
@@ -146,7 +164,33 @@ local function run_it(do_log)
     vim.cmd('startinsert')
   end
 
-  if is_cmake then
+  if is_sh then
+    local current_file = vim.fn.expand('%:p') -- Get full path of current buffer
+    local is_executable = vim.fn.executable(current_file) == 1
+
+    local function execute_script()
+      create_terminal_window()
+      if do_log then
+        vim.cmd(string.format('call feedkeys("%s > log.txt\\r", "t")', current_file))
+      else
+        vim.cmd(string.format('call feedkeys("%s\\r", "t")', current_file))
+      end
+      vim.cmd('startinsert')
+    end
+
+    if not is_executable then
+      vim.ui.input({
+        prompt = string.format("Make %s executable? (y/n) > ", vim.fn.expand('%:t'))
+      }, function(input)
+        if input and (input:lower() == 'y' or input:lower() == 'yes') then
+          vim.fn.system(string.format('chmod +x "%s"', current_file))
+          execute_script()
+        end
+      end)
+    else
+      execute_script()
+    end
+  elseif is_cmake then
     -- Use current working directory as project identifier
     local project_id = vim.fn.getcwd()
 
@@ -185,7 +229,7 @@ local function run_it(do_log)
     vim.cmd('call feedkeys("exit", "t")')
     vim.cmd('startinsert')
   else
-    vim.notify("No cmake, scons, or godot project detected.", vim.log.levels.WARN)
+    vim.notify("Not cmake, scons, Godot, or shell script.", vim.log.levels.WARN)
   end
 end
 
