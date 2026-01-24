@@ -1,3 +1,7 @@
+local function getWords()
+  return tostring(vim.fn.wordcount().words) .. " words"
+end
+
 require('lualine').setup {
   options = {
     theme = 'auto',
@@ -16,6 +20,14 @@ require('lualine').setup {
     lualine_b = {
       'branch',
       'diff',
+    },
+    lualine_z = {
+      {
+        getWords,
+        cond = function()
+          return vim.bo.filetype == "markdown"
+        end,
+      },
     },
   }
 }

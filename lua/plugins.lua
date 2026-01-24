@@ -1,4 +1,5 @@
 return {
+  { 'preservim/vim-pencil' },
   { 'romariorobby/taskell.nvim' },
   {
     "OmniSharp/omnisharp-vim",
@@ -15,25 +16,6 @@ return {
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
   {
-    "wojciech-kulik/xcodebuild.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "MunifTanjim/nui.nvim",
-      "folke/snacks.nvim",               -- (optional) to show previews
-      "nvim-tree/nvim-tree.lua",         -- (optional) to manage project files
-      "stevearc/oil.nvim",               -- (optional) to manage project files
-      "nvim-treesitter/nvim-treesitter", -- (optional) for Quick tests support (required Swift parser)
-    },
-    config = function()
-      require("xcodebuild").setup({
-        compile_commands = {
-          enabled = true,
-          use_nvim_lsp_config = true,
-        },
-      })
-    end,
-  },
-  {
     'stevearc/aerial.nvim',
     opts = {},
     -- Optional dependencies
@@ -41,11 +23,6 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons"
     },
-  },
-  {
-    "folke/zen-mode.nvim",
-    opts = {
-    }
   },
   {
     'leoluz/nvim-dap-go'
@@ -69,7 +46,6 @@ return {
       require('template').setup({
         temp_dir = '~/.config/nvim/templates',
         author = 'Tim Raveling',
-        email = 'tsraveling@gmail.com'
       })
     end
   },
@@ -102,7 +78,7 @@ return {
       -- log_level = 'debug',
     }
   },
-  { 'echasnovski/mini.nvim',      version = '*' },
+  { 'echasnovski/mini.nvim',              version = '*' },
   { 'nvim-tree/nvim-web-devicons' },
   {
     'rcarriga/nvim-notify'
@@ -239,8 +215,16 @@ return {
       quickfile = { enabled = true },
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
-      words = { enabled = true },
-      zen = { enabled = false },
+      words = { enabled = false },
+      zen = {
+        toggles = {
+          dim = false,
+          git_signs = false,
+          mini_diff_signs = false,
+        },
+        enabled = true,
+        center = true, -- center the window
+      },
       scratch = {
         enabled = true,
         ft = function()
@@ -253,6 +237,9 @@ return {
         autowrite = true, -- automatically write when the buffer is hidden
       },
       styles = {
+        zen = {
+          width = 80
+        },
         notification = {
           -- wo = { wrap = true } -- Wrap notifications
         }

@@ -1,4 +1,5 @@
 require("tsr.remap")
+require("tsr.notes")
 require("tsr.set")
 require("tsr.cpp_stubs")
 
@@ -14,23 +15,6 @@ end, {})
 vim.api.nvim_create_user_command('OpenLearning', function()
   vim.cmd('rightbelow split ~/notes/LEARNING.md')
 end, {})
-
--- autocmds
-vim.api.nvim_create_autocmd('BufWinEnter', {
-  pattern = { '*.md' },
-  callback = function()
-    vim.opt.wrap = true
-    vim.opt.linebreak = true
-  end,
-})
-
-vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
-  pattern = { '*.md' },
-  callback = function()
-    vim.opt.wrap = false
-    vim.opt.linebreak = false
-  end,
-})
 
 -- Set filetype for protobuf files
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {

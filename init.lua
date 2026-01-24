@@ -8,6 +8,11 @@ require("rose-pine").setup({
   variant = "main",
   styles = {
     italic = false,
+  },
+  highlight_groups = {
+    Comment = { italic = true },
+    ["@comment"] = { italic = true },
+    ["@markup.italic"] = { italic = true },
   }
 })
 vim.cmd("colorscheme rose-pine")

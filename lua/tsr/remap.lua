@@ -53,7 +53,8 @@ vim.keymap.set("n", "<leader>tt", "<cmd>TodoTelescope keywords=TODO<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>TodoTelescope keywords=STUB<cr>")
 
 -- Taskell TODO
-vim.keymap.set("n", "<leader>tm", "<cmd>Taskell ~/notes/taskell/Main.md<cr>")
+vim.keymap.set("n", "<leader>tk", "<cmd>Taskell ~/notes/_sync/taskell/Main.md<cr>")
+vim.keymap.set("n", "<leader>tl", "<cmd>Taskell " .. vim.fn.getcwd() .. "/KANBAN.md<cr>")
 
 
 vim.keymap.set("n", "<leader>cj", function()
@@ -90,6 +91,11 @@ vim.keymap.set("n", "<leader>lw", function()
       set linebreak
   ]])
 end)
+
+-- typewriter mode
+vim.keymap.set('n', '<leader>tw', function()
+  vim.o.scrolloff = 9999 - vim.o.scrolloff
+end, { noremap = true, silent = true })
 
 -- SECTION: External apps
 
@@ -139,7 +145,8 @@ local function run_it(do_log)
   local is_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
   local is_godot = vim.fn.filereadable('project.godot') == 1
   local is_sh = vim.bo.filetype == 'sh' or vim.bo.filetype == 'zsh'
-
+  local is_treesitter = vim.fn.filereadable('tree-sitter.json') == 1
+  local is_go = vim.fn.filereadable('go.mod') == 1
 
   -- Helper function to create terminal window
   local function create_terminal_window()
@@ -160,7 +167,7 @@ local function run_it(do_log)
       vim.cmd([[call feedkeys(" > log.txt", 't')]])
     end
     vim.cmd([[call feedkeys("\r", 't')]])
-    vim.cmd([[call feedkeys("exit", 't')]])
+    -- vim.cmd([[call feedkeys("exit", 't')]]) -- prefills exit, useful for simple runs
     vim.cmd('startinsert')
   end
 
@@ -190,6 +197,23 @@ local function run_it(do_log)
     else
       execute_script()
     end
+  elseif is_treesitter then
+    create_terminal_window()
+    if do_log then
+      vim.cmd('call feedkeys("tree-sitter generate > log.txt\\r", "t")')
+    else
+      vim.cmd('call feedkeys("tree-sitter generate\\r", "t")')
+    end
+    vim.cmd('call feedkeys("exit", "t")')
+    vim.cmd('startinsert')
+  elseif is_go then
+    create_terminal_window()
+    if (do_log) then
+      vim.cmd('call feedkeys("go run . > log.txt\\r", "t")')
+    else
+      vim.cmd('call feedkeys("go run .\\r", "t")')
+    end
+    vim.cmd('startinsert')
   elseif is_cmake then
     -- Use current working directory as project identifier
     local project_id = vim.fn.getcwd()
@@ -305,6 +329,17 @@ vim.keymap.set('n', '<leader>yf', function()
   vim.fn.setreg('+', filepath)
   vim.notify('Copied to clipboard: ' .. filepath, vim.log.levels.INFO)
 end, { desc = "Copy file path to clipboard" })
+
+-- Copy current file path (absolute)
+vim.keymap.set('n', '<leader>yF', function()
+  local filepath = vim.fn.expand('%:p')
+  if filepath == '' then
+    vim.notify('No file in current buffer', vim.log.levels.WARN)
+    return
+  end
+  vim.fn.setreg('+', filepath)
+  vim.notify('Copied to clipboard: ' .. filepath, vim.log.levels.INFO)
+end, { desc = "Copy absolute file path to clipboard" })
 
 -- SECTION: Transparency
 

@@ -17,3 +17,4 @@ vim.keymap.set("n", "<c-/>", function() Snacks.terminal() end, { desc = "Toggle 
 vim.keymap.set("n", "<c-_>", function() Snacks.terminal() end, { desc = "which_key_ignore" })
 vim.keymap.set({ "n", "t" }, "<leader>]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
 vim.keymap.set({ "n", "t" }, "<leader>[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
+vim.keymap.set("n", "<leader>zm", function() Snacks.zen() end, { desc = "Zen Mode" })
