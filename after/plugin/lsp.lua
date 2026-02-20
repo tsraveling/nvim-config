@@ -73,6 +73,14 @@ vim.lsp.config('ts_ls', {
   capabilities = capabilities,
 })
 
+-- Skald LSP
+vim.lsp.config("skald_lsp", {
+  cmd = { vim.fn.expand("~/repos/skald/build/skald_lsp") },
+  filetypes = { "skald" },
+  root_markers = { ".git" },
+})
+vim.lsp.enable("skald_lsp")
+
 -- Godot LSP
 vim.lsp.config('gdscript', {
   name = "godot",
