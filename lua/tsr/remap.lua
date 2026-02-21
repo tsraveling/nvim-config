@@ -147,6 +147,7 @@ local function run_it(do_log)
   local is_sh = vim.bo.filetype == 'sh' or vim.bo.filetype == 'zsh'
   local is_treesitter = vim.fn.filereadable('tree-sitter.json') == 1
   local is_go = vim.fn.filereadable('go.mod') == 1
+  local is_go_server = is_go and vim.fn.filereadable('cmd/main.go') == 1
 
   -- Helper function to create terminal window
   local function create_terminal_window()
@@ -206,9 +207,39 @@ local function run_it(do_log)
     end
     vim.cmd('call feedkeys("exit", "t")')
     vim.cmd('startinsert')
+  elseif is_go_server then
+      -- Server pattern: kill process on port, then run
+      local project_id = vim.fn.getcwd()
+      if not _G.project_server_ports then
+        _G.project_server_ports = {}
+      end
+
+      local function run_server(port)
+        create_terminal_window()
+        -- Kill existing process on port, then start server
+        local kill_cmd = string.format("lsof -ti:%s | xargs kill -9 2>/dev/null; ", port)
+        local run_cmd = string.format("go run ./cmd -port %s", port)
+        if do_log then
+          run_cmd = run_cmd .. " > log.txt"
+        end
+        vim.cmd(string.format('call feedkeys("%s%s\\r", "t")', kill_cmd, run_cmd))
+        vim.cmd('startinsert')
+      end
+
+      if not _G.project_server_ports[project_id] then
+        vim.ui.input({ prompt = "Server port > " }, function(port)
+          if port and port ~= "" then
+            _G.project_server_ports[project_id] = port
+            run_server(port)
+          end
+        end)
+      else
+        run_server(_G.project_server_ports[project_id])
+      end
   elseif is_go then
+    -- Simple go project (bubbletea, CLI, etc)
     create_terminal_window()
-    if (do_log) then
+    if do_log then
       vim.cmd('call feedkeys("go run . > log.txt\\r", "t")')
     else
       vim.cmd('call feedkeys("go run .\\r", "t")')
