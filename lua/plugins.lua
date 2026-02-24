@@ -223,7 +223,7 @@ return {
           mini_diff_signs = false,
         },
         enabled = true,
-        center = true, -- center the window
+        center = true,
       },
       scratch = {
         enabled = true,

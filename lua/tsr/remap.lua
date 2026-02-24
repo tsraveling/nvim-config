@@ -208,34 +208,34 @@ local function run_it(do_log)
     vim.cmd('call feedkeys("exit", "t")')
     vim.cmd('startinsert')
   elseif is_go_server then
-      -- Server pattern: kill process on port, then run
-      local project_id = vim.fn.getcwd()
-      if not _G.project_server_ports then
-        _G.project_server_ports = {}
-      end
+    -- Server pattern: kill process on port, then run
+    local project_id = vim.fn.getcwd()
+    if not _G.project_server_ports then
+      _G.project_server_ports = {}
+    end
 
-      local function run_server(port)
-        create_terminal_window()
-        -- Kill existing process on port, then start server
-        local kill_cmd = string.format("lsof -ti:%s | xargs kill -9 2>/dev/null; ", port)
-        local run_cmd = string.format("go run ./cmd -port %s", port)
-        if do_log then
-          run_cmd = run_cmd .. " > log.txt"
+    local function run_server(port)
+      create_terminal_window()
+      -- Kill existing process on port, then start server
+      local kill_cmd = string.format("lsof -ti:%s | xargs kill -9 2>/dev/null; ", port)
+      local run_cmd = string.format("go run ./cmd -port %s", port)
+      if do_log then
+        run_cmd = run_cmd .. " > log.txt"
+      end
+      vim.cmd(string.format('call feedkeys("%s%s\\r", "t")', kill_cmd, run_cmd))
+      vim.cmd('startinsert')
+    end
+
+    if not _G.project_server_ports[project_id] then
+      vim.ui.input({ prompt = "Server port > " }, function(port)
+        if port and port ~= "" then
+          _G.project_server_ports[project_id] = port
+          run_server(port)
         end
-        vim.cmd(string.format('call feedkeys("%s%s\\r", "t")', kill_cmd, run_cmd))
-        vim.cmd('startinsert')
-      end
-
-      if not _G.project_server_ports[project_id] then
-        vim.ui.input({ prompt = "Server port > " }, function(port)
-          if port and port ~= "" then
-            _G.project_server_ports[project_id] = port
-            run_server(port)
-          end
-        end)
-      else
-        run_server(_G.project_server_ports[project_id])
-      end
+      end)
+    else
+      run_server(_G.project_server_ports[project_id])
+    end
   elseif is_go then
     -- Simple go project (bubbletea, CLI, etc)
     create_terminal_window()
@@ -328,6 +328,34 @@ end, { desc = 'List methods in current file' })
 
 -- Markdown formatting hotkeys
 vim.keymap.set("i", "<D-b>", "**")
+
+-- Wrap selection in markdown bold with Cmd+b (visual and visual-line)
+vim.keymap.set("v", "<D-b>", function()
+  -- Exit visual mode to set '< and '> marks
+  vim.cmd('normal! ' .. vim.api.nvim_replace_termcodes('<Esc>', true, false, true))
+
+  local start_row, start_col = unpack(vim.api.nvim_buf_get_mark(0, '<'))
+  local end_row, end_col = unpack(vim.api.nvim_buf_get_mark(0, '>'))
+  local mode = vim.fn.visualmode()
+
+  if mode == 'V' then
+    -- Line-wise: bold at start of first line, end of last line
+    local first_line = vim.api.nvim_buf_get_lines(0, start_row - 1, start_row, false)[1]
+    if start_row == end_row then
+      vim.api.nvim_buf_set_lines(0, start_row - 1, start_row, false, { '**' .. first_line .. '**' })
+    else
+      local last_line = vim.api.nvim_buf_get_lines(0, end_row - 1, end_row, false)[1]
+      vim.api.nvim_buf_set_lines(0, end_row - 1, end_row, false, { last_line .. '**' })
+      vim.api.nvim_buf_set_lines(0, start_row - 1, start_row, false, { '**' .. first_line })
+    end
+  else
+    -- Character-wise: bold around the exact selection
+    local end_line = vim.api.nvim_buf_get_lines(0, end_row - 1, end_row, false)[1]
+    local insert_at = math.min(end_col + 1, #end_line)
+    vim.api.nvim_buf_set_text(0, end_row - 1, insert_at, end_row - 1, insert_at, { '**' })
+    vim.api.nvim_buf_set_text(0, start_row - 1, start_col, start_row - 1, start_col, { '**' })
+  end
+end, { desc = 'Wrap selection in markdown bold' })
 
 -- SECTION: Split navigation
 vim.keymap.set('n', '<leader>/v', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
