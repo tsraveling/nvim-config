@@ -124,20 +124,8 @@ vim.keymap.set('n', '<leader>bg', function()
 end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
 
 
--- Run the build
-vim.keymap.set('n', '<leader>bb', function()
-  vim.cmd('vsplit')
-  vim.cmd('wincmd L')
-  vim.cmd('vertical resize 60')
-  vim.cmd('terminal')
-  vim.cmd([[
-        call feedkeys("cd build\r", 't')
-        call feedkeys("cmake ..\r", 't')
-        call feedkeys("make\r", 't')
-        call feedkeys("exit", 't')
-    ]])
-  vim.cmd('startinsert')
-end, { noremap = true, desc = "Open terminal, setup build dir & run cmake" })
+-- Run the build (compile.sh or cmake fallback)
+require('tsr.adv._bb')
 
 -- The runner method
 local function run_it(do_log)
