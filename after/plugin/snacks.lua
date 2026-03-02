@@ -18,3 +18,4 @@ vim.keymap.set("n", "<c-_>", function() Snacks.terminal() end, { desc = "which_k
 vim.keymap.set({ "n", "t" }, "<leader>]", function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
 vim.keymap.set({ "n", "t" }, "<leader>[", function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
 vim.keymap.set("n", "<leader>zm", function() Snacks.zen() end, { desc = "Zen Mode" })
+vim.keymap.set("n", "<leader>zl", function() Snacks.zen({ win = { style = { col = 2 } } }) end, { desc = "Zen Mode (Left)" })
