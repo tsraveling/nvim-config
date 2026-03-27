@@ -17,7 +17,11 @@ return {
   },
   {
     'stevearc/aerial.nvim',
-    opts = {},
+    opts = {
+      backends_by_filetype = {
+        sql = { 'lsp' },
+      },
+    },
     -- Optional dependencies
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
@@ -224,6 +228,15 @@ return {
         },
         enabled = true,
         center = true,
+        on_open = function(win)
+          -- Defer so the WinEnter autocmd exists before we try to remove it
+          vim.schedule(function()
+            local aus = vim.api.nvim_get_autocmds({ group = win.augroup, event = "WinEnter" })
+            for _, au in ipairs(aus) do
+              vim.api.nvim_del_autocmd(au.id)
+            end
+          end)
+        end,
       },
       scratch = {
         enabled = true,

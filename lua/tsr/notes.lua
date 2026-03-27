@@ -44,6 +44,8 @@ local function clean_selection()
   text = text:gsub(" o n ", " on ")
   text = text:gsub(" i n ", " in ")
   text = text:gsub(" i f ", " if ")
+  text = text:gsub(" b y ", " by ")
+  text = text:gsub(" a s ", " as ")
   text = text:gsub(" s o ", " so ")
 
   -- 3. Combine hyphenated line breaks (char- char -> charchar)
