@@ -7,6 +7,7 @@ local function run_it(do_log)
   local is_treesitter = vim.fn.filereadable('tree-sitter.json') == 1
   local is_go = vim.fn.filereadable('go.mod') == 1
   local is_go_server = is_go and vim.fn.filereadable('cmd/main.go') == 1
+  local is_rust = vim.fn.filereadable('cargo.toml') == 1
 
   -- Helper function to create terminal window
   local function create_terminal_window()
@@ -130,6 +131,15 @@ local function run_it(do_log)
       vim.cmd('call feedkeys("scons > log.txt\\r", "t")')
     else
       vim.cmd('call feedkeys("scons\\r", "t")')
+    end
+    vim.cmd('call feedkeys("exit", "t")')
+    vim.cmd('startinsert')
+  elseif is_rust then
+    create_terminal_window()
+    if do_log then
+      vim.cmd('call feedkeys("cargo run > log.txt\\r", "t")')
+    else
+      vim.cmd('call feedkeys("cargo run\\r", "t")')
     end
     vim.cmd('call feedkeys("exit", "t")')
     vim.cmd('startinsert')
