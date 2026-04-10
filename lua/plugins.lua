@@ -209,27 +209,32 @@ return {
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" }
   },
-  { "rose-pine/neovim",          name = "rose-pine" },
+  { "rose-pine/neovim", name = "rose-pine" },
   {
     'nvim-telescope/telescope.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' }
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
     config = function()
-      local configs = require("nvim-treesitter.configs")
-
-      configs.setup({
-        ensure_installed = { "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "proto", "markdown" },
-        sync_install = false,
-        auto_install = true,
-        highlight = { enable = true, additional_vim_regex_highlighting = false },
-        indent = { enable = true },
+      -- Enable treesitter highlighting and indentation via FileType autocmd (new main branch API)
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function()
+          pcall(vim.treesitter.start)
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
       })
-    end
+
+      -- Install parsers (replaces ensure_installed)
+      local wanted = {
+        "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc",
+        "query", "elixir", "heex", "javascript", "html", "proto", "markdown",
+      }
+      require("nvim-treesitter").install(wanted)
+    end,
   },
-  { "nvim-treesitter/playground" },
   {
     "folke/snacks.nvim",
     priority = 1000,
