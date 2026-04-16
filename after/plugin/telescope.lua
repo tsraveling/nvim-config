@@ -1,3 +1,6 @@
+vim.g.dictionary_api_key = "d92b14a9-d927-4334-9c0f-8b6e67360bab"
+
+
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>pf", builtin.find_files, {})
 vim.keymap.set("n", "<leader>ss", function()

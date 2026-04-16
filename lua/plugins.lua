@@ -212,7 +212,7 @@ return {
   { "rose-pine/neovim", name = "rose-pine" },
   {
     'nvim-telescope/telescope.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = { 'nvim-lua/plenary.nvim', 'rafi/telescope-thesaurus.nvim' }
   },
   {
     "nvim-treesitter/nvim-treesitter",
@@ -231,6 +231,7 @@ return {
       local wanted = {
         "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc",
         "query", "elixir", "heex", "javascript", "html", "proto", "markdown",
+        "swift", "go", "rust", "sql", "gdscript", "json"
       }
       require("nvim-treesitter").install(wanted)
     end,

@@ -33,6 +33,17 @@ vim.keymap.set("n", "<leader><esc>", "<cmd>on<cr>")
 -- save shortcut
 vim.keymap.set("n", "<leader>w", "<cmd>w<cr>")
 
+-- SECTION: Writing Tools
+
+vim.keymap.set('n', '<leader>th', function()
+  vim.ui.input({ prompt = 'Thesaurus >' }, function(word)
+    if word and #word > 0 then
+      require('telescope').extensions.thesaurus.query({ word = word })
+    end
+  end)
+end)
+vim.keymap.set('n', '<leader>tH', '<cmd>Telescope thesaurus lookup<CR>')
+
 -- SECTION: Todos
 local function quick_search(term)
   require('telescope.builtin').live_grep({
