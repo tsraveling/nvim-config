@@ -169,6 +169,11 @@ vim.keymap.set('n', '<leader>cm', function()
   })
 end, { desc = 'List methods in current file' })
 
+-- Insert filename without extension at cursor
+vim.keymap.set("i", "<D-/>", function()
+  return vim.fn.expand('%:t:r')
+end, { expr = true, desc = "Insert filename without extension" })
+
 -- Markdown formatting hotkeys
 vim.keymap.set("i", "<D-b>", "**")
 
