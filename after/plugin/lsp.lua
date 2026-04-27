@@ -155,6 +155,14 @@ cmp.setup({
   }),
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "markdown", "gitcommit", "text" },
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = "en_us"
+  end,
+})
+
 -- Typescript organize imports
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = { "*.tsx", "*.ts", "*.jsx", "*.js" },

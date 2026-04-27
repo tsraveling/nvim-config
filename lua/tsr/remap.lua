@@ -141,6 +141,9 @@ require('tsr.adv._bb')
 -- Run the software in various environments (<leader>br / <leader>bR)
 require('tsr.adv._br')
 
+-- Handle qflist stuff
+require('tsr.adv._qf')
+
 -- Switch between header and source files in c++ (only works with .h and .cpp)
 vim.keymap.set('n', '<leader>cf', function()
   local current_file = vim.fn.expand('%')
@@ -282,22 +285,3 @@ vim.keymap.set("n", "<leader>z{", 'zfi{', { desc = "Fold in brackets" })
 
 vim.opt.grepprg = 'rg --vimgrep --smart-case --follow'
 vim.opt.grepformat = '%f:%l:%c:%m'
-
-vim.keymap.set('n', '<C-.>', function()
-  pcall(vim.cmd, 'cnext')
-end, { desc = 'Qflist next' })
-
-vim.keymap.set('n', '<C-,>', function()
-  pcall(vim.cmd, 'cprev')
-end, { desc = 'Qflist next' })
-
-vim.keymap.set('n', '<leader>>', function()
-  vim.cmd([[silent! grep '>>>']])
-  local qf_size = vim.fn.getqflist({ size = 0 }).size
-  print('Added ' .. qf_size .. ' instances of >>> to QFList')
-  if qf_size > 0 then
-    vim.cmd('cfirst')
-  else
-    print('No instances of >>> found')
-  end
-end, { noremap = true, silent = true, desc = 'Search for >>> in codebase' })
