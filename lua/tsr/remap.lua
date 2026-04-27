@@ -209,8 +209,22 @@ vim.keymap.set("v", "<D-b>", function()
 end, { desc = 'Wrap selection in markdown bold' })
 
 -- SECTION: Split navigation
-vim.keymap.set('n', '<leader>/v', '<cmd>vsplit<CR>', { desc = 'Open vertical split' })
-vim.keymap.set('n', '<leader>/h', '<cmd>split<CR>', { desc = 'Open horizontal split' })
+local function close_zen_if_active()
+  local ok, Snacks = pcall(require, 'snacks')
+  if ok and Snacks.zen and Snacks.zen.win and Snacks.zen.win:valid() then
+    Snacks.zen.win:close()
+    Snacks.zen.win = nil
+  end
+end
+
+vim.keymap.set('n', '<leader>/v', function()
+  close_zen_if_active()
+  vim.cmd('vsplit')
+end, { desc = 'Open vertical split' })
+vim.keymap.set('n', '<leader>/h', function()
+  close_zen_if_active()
+  vim.cmd('split')
+end, { desc = 'Open horizontal split' })
 
 vim.keymap.set('n', '<leader>/x', function()
   vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
