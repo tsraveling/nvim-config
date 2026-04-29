@@ -16,11 +16,6 @@ vim.keymap.set("n", "<c-d>", "<c-d>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "n", "nzzzv")
 
--- todos in obsidian (may remove later)
-vim.keymap.set("n", "<leader>mt", "<cmd>opentodo<cr>")
-vim.keymap.set("n", "<leader>mn", "<cmd>opennotebook<cr>")
-vim.keymap.set("n", "<leader>ml", "<cmd>openlearning<cr>")
-
 -- shoutout
 vim.keymap.set("n", "<leader>so", "<cmd>so<cr>", { desc = "shout out" })
 
@@ -143,6 +138,9 @@ require('tsr.adv._br')
 
 -- Handle qflist stuff
 require('tsr.adv._qf')
+
+-- Writing helpers (word counts)
+require('tsr.adv.writing')
 
 -- Switch between header and source files in c++ (only works with .h and .cpp)
 vim.keymap.set('n', '<leader>cf', function()

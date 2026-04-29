@@ -2,6 +2,7 @@
 local function run_it(do_log)
   local is_scons = vim.fn.filereadable('SConstruct') == 1
   local is_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
+  local is_ninja = vim.fn.filereadable('build/build.ninja') == 1 or vim.fn.filereadable('build.ninja') == 1
   local is_godot = vim.fn.filereadable('project.godot') == 1
   local is_sh = vim.bo.filetype == 'sh' or vim.bo.filetype == 'zsh'
   local is_treesitter = vim.fn.filereadable('tree-sitter.json') == 1
@@ -19,10 +20,10 @@ local function run_it(do_log)
 
   local function build_cmake(build_tar)
     create_terminal_window()
-    vim.cmd([[
-      call feedkeys("cd build\r", 't')
-      call feedkeys("cmake .. && make && ", 't')
-    ]])
+    local configure = is_ninja and "cmake -G Ninja .." or "cmake .."
+    local builder = is_ninja and "ninja" or "make"
+    vim.cmd(string.format('call feedkeys("cd build\\r", "t")'))
+    vim.cmd(string.format('call feedkeys("%s && %s && ", "t")', configure, builder))
     vim.cmd(string.format('call feedkeys("./%s", "t")', build_tar))
     if (do_log) then
       vim.cmd([[call feedkeys(" > log.txt", 't')]])
@@ -157,6 +158,55 @@ local function run_it(do_log)
   end
 end
 
+-- Async build to qflist (cmake/ninja/make C++ projects)
+local function build_to_qf()
+  local has_ninja = vim.fn.filereadable('build/build.ninja') == 1
+  local has_make = vim.fn.filereadable('build/Makefile') == 1
+  local has_cmake = vim.fn.filereadable('CMakeLists.txt') == 1
+
+  if not (has_ninja or has_make or has_cmake) then
+    vim.notify("No cmake/ninja/make project detected.", vim.log.levels.WARN)
+    return
+  end
+
+  if has_cmake and not (has_ninja or has_make) then
+    vim.notify("Run cmake config first (build/ not configured).", vim.log.levels.WARN)
+    return
+  end
+
+  local cmd = has_ninja and { 'ninja', '-C', 'build' } or { 'make', '-C', 'build' }
+  local output = {}
+
+  local function collect(_, data)
+    if not data then return end
+    for _, line in ipairs(data) do
+      if line ~= "" then table.insert(output, line) end
+    end
+  end
+
+  vim.notify("Build: " .. table.concat(cmd, ' '))
+  vim.fn.jobstart(cmd, {
+    stdout_buffered = true,
+    stderr_buffered = true,
+    on_stdout = collect,
+    on_stderr = collect,
+    on_exit = function(_, code)
+      vim.fn.setqflist({}, ' ', {
+        title = 'Build: ' .. table.concat(cmd, ' '),
+        lines = output,
+        efm = vim.o.errorformat,
+      })
+      if code == 0 then
+        vim.notify("Build OK", vim.log.levels.INFO)
+        vim.cmd('cclose')
+      else
+        vim.notify("Build failed (exit " .. code .. ")", vim.log.levels.ERROR)
+        vim.cmd('botright copen')
+      end
+    end,
+  })
+end
+
 -- Run the software in various environments
 vim.keymap.set('n', "<leader>br", function()
   run_it(false)
@@ -166,3 +216,6 @@ end)
 vim.keymap.set('n', "<leader>bR", function()
   run_it(true)
 end)
+
+-- Build to quickfix list (errors parsed via errorformat)
+vim.keymap.set('n', "<leader>bq", build_to_qf)
