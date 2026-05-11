@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.qu8n.com)",
+      "Read(//Users/tsraveling/.local/share/nvim/lazy/nvim-treesitter/parser-info/**)",
+      "Read(//Users/tsraveling/.local/share/nvim/tree-sitter-kotlin-tmp/**)",
+      "Read(//Users/tsraveling/.local/share/nvim/tree-sitter-lua-tmp/**)",
+      "Read(//Users/tsraveling/.local/share/nvim/tree-sitter-diff-tmp/**)",
+      "Read(//Users/tsraveling/.local/share/nvim/**)",
+      "Read(//Users/tsraveling/.local/share/nvim/site/**)",
+      "Bash(nvim --version)",
+      "Bash(nvim --headless --noplugin -c \"echo stdpath\\('cache'\\)\" -c \"qa\")",
+      "Bash(nvim --headless --noplugin -c \"echo stdpath\\('data'\\)\" -c \"qa\")",
+      "Read(//Users/tsraveling/.cache/nvim/**)",
+      "Bash(tree-sitter --version)"
+    ]
+  }
+}

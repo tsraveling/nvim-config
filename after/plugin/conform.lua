@@ -159,7 +159,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   callback = function(args)
     local formatters = get_formatters()
     if not formatters then
-      print("formatter not found, using lsp")
       require("conform").format({ bufnr = args.buf, lsp_fallback = true })
     else
       print("formatted with " .. formatters[1])
