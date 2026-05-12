@@ -1,24 +1,8 @@
 return {
-  { "sindrets/diffview.nvim" },
   {
     "kylechui/nvim-surround",
     version = "^4.0.0", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
-    -- Optional: See `:h nvim-surround.configuration` and `:h nvim-surround.setup` for details
-    -- config = function()
-    --     require("nvim-surround").setup({
-    --         -- Put your configuration here
-    --     })
-    -- end
-  },
-  {
-    'mrcjkb/rustaceanvim',
-    -- To avoid being surprised by breaking changes,
-    -- I recommend you set a version range
-    version = '^9',
-    -- This plugin implements proper lazy-loading (see :h lua-plugin-lazy).
-    -- No need for lazy.nvim to lazy-load it.
-    lazy = false,
   },
   { 'preservim/vim-pencil' },
   {
@@ -35,53 +19,11 @@ return {
         right_pad = 1,
         disable_background = true,
       },
-      --  heading = {
-      --    sign = false,
-      --  },
-    },
-  },
-  { 'romariorobby/taskell.nvim' },
-  {
-    "OmniSharp/omnisharp-vim",
-    ft = 'cs',
-  },
-  {
-    "j-hui/fidget.nvim",
-    opts = {
-      -- options
     },
   },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
-  },
-  {
-    'stevearc/aerial.nvim',
-    opts = {
-      backends_by_filetype = {
-        sql = { 'lsp' },
-      },
-    },
-    -- Optional dependencies
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons"
-    },
-  },
-  {
-    'leoluz/nvim-dap-go'
-  },
-  {
-    "sotte/presenting.nvim",
-    opts = {
-      -- fill in your options here
-      -- see :help Presenting.config
-    },
-    cmd = { "Presenting" },
-  },
-  {
-    'RishabhRD/popfix',
-    'RishabhRD/nvim-cheat.sh'
   },
   {
     'glepnir/template.nvim',
@@ -93,69 +35,12 @@ return {
       })
     end
   },
-  { "artemave/workspace-diagnostics.nvim" },
   require('plugins.trouble'),
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      -- add any options here
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    }
-  },
-  {
-    'rmagatti/auto-session',
-    lazy = false,
-
-    ---enables autocomplete for opts
-    ---@module "auto-session"
-    ---@type AutoSession.Config
-    opts = {
-      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
-      -- log_level = 'debug',
-    }
-  },
   { 'echasnovski/mini.nvim',      version = '*' },
   { 'nvim-tree/nvim-web-devicons' },
   {
-    'rcarriga/nvim-notify'
-  },
-  {
     'stevearc/conform.nvim',
     opts = {},
-  },
-  {
-    "Freedzone/kerbovim"
-  },
-  {
-    'mfussenegger/nvim-dap',
-  },
-  {
-    "rcarriga/nvim-dap-ui",
-    event = "VeryLazy",
-    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-  },
-  {
-    "jay-babu/mason-nvim-dap.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "mfussenegger/nvim-dap",
-    },
-    opts = {
-      handlers = {},
-      ensure_installed = {
-        "codelldb",
-        "buf"
-      }
-    }
   },
   {
     "folke/todo-comments.nvim",
@@ -190,12 +75,6 @@ return {
     "windwp/nvim-autopairs"
   },
   {
-    "williamboman/mason.nvim",
-  },
-  {
-    "williamboman/mason-lspconfig.nvim",
-  },
-  {
 
     'neovim/nvim-lspconfig',
   },
@@ -204,9 +83,6 @@ return {
   {
     "mbbill/undotree",
     lazy = false,
-  },
-  {
-    "tpope/vim-fugitive"
   },
   {
     "ThePrimeagen/harpoon",
@@ -304,11 +180,11 @@ return {
             padding = 1,
           },
           { section = "keys", gap = 1, padding = 1 },
-          { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+          { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
           {
             pane = 2,
-            icon = " ",
+            icon = " ",
             title = "Git Status",
             section = "terminal",
             enabled = function()
