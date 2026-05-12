@@ -111,31 +111,21 @@ end
 require("conform").setup({
   --- NOTE: table<filetype, table<formatter>>
   formatters_by_ft = {
-    css = { "biome-check", "prettier", "stylelint" },
+    c = { "clang-format" },
+    cpp = { "clang-format" },
+    rust = { "rustfmt" },
     go = { "goimports", "gofmt" },
-    html = { "biome-check", "prettier" },
-    javascript = { "biome-check", "prettier" },
-    javascriptreact = { "biome-check", "prettier" },
-    json = { "biome-check", "prettier" },
-    jsonc = { "biome-check", "prettier" },
+    gdscript = { "gdformat" },
     lua = { "stylua" },
-    sh = { "shellcheck", "shfmt" },
-    svelte = { "biome-check", "prettier" },
-    templ = { "templ" },
-    typescript = { "biome-check", "prettier" },
-    typescriptreact = { "biome-check", "prettier" },
-    vue = { "biome-check", "prettier" },
-    yaml = { "biome-check", "prettier" },
+    sh = { "shfmt" },
   },
 })
 
 local get_formatters = function()
   local formatters = get_closest_formatter({
-    ["biome-check"] = { "biome.json" },
-    -- gofmt = { "goimports", "go.mod" },
-    -- goimports = { "go.mod" },
-    prettier = { ".prettierrc", "prettier.config.js" },
     stylua = { "stylua.toml" },
+    rustfmt = { "rustfmt.toml", ".rustfmt.toml" },
+    ["clang-format"] = { ".clang-format" },
   })
   return formatters
 end

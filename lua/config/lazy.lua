@@ -30,6 +30,7 @@ require("lazy").setup({
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
+  -- disable background polling for plugin updates (battery/data on phone)
+  checker = { enabled = false },
+  change_detection = { enabled = false, notify = false },
 })

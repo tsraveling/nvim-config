@@ -48,5 +48,3 @@ end
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = manage_lsp_log,
 })
-
-vim.lsp.set_log_level('warn')
