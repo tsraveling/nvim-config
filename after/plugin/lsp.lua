@@ -37,6 +37,54 @@ if vim.fn.executable('lua-language-server') == 1 then
   vim.lsp.enable('lua_ls')
 end
 
+-- C/C++ (clangd auto-finds compile_commands.json in ./ or ./build/)
+if vim.fn.executable('clangd') == 1 then
+  vim.lsp.config('clangd', {
+    capabilities = capabilities,
+    cmd = {
+      'clangd',
+      '--background-index',
+      '--completion-style=detailed',
+      '--header-insertion=never',
+      '--std=c++20',
+    },
+  })
+  vim.lsp.enable('clangd')
+end
+
+-- Rust (tuned for nav-only: no check, no proc-macros, no build scripts)
+if vim.fn.executable('rust-analyzer') == 1 then
+  vim.lsp.config('rust_analyzer', {
+    capabilities = capabilities,
+    settings = {
+      ['rust-analyzer'] = {
+        cargo = {
+          buildScripts = { enable = false },
+          loadOutDirsFromCheck = false,
+        },
+        procMacro = { enable = false },
+        checkOnSave = false,
+        diagnostics = { enable = false },
+      },
+    },
+  })
+  vim.lsp.enable('rust_analyzer')
+end
+
+-- Go
+if vim.fn.executable('gopls') == 1 then
+  vim.lsp.config('gopls', {
+    capabilities = capabilities,
+    settings = {
+      gopls = {
+        analyses = { unusedparams = false },
+        staticcheck = false,
+      },
+    },
+  })
+  vim.lsp.enable('gopls')
+end
+
 local cmp = require('cmp')
 
 cmp.setup({
