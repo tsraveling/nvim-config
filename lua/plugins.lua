@@ -109,9 +109,10 @@ return {
 
       -- Install parsers (replaces ensure_installed)
       local wanted = {
-        "c", "lua", "cpp", "cmake", "typescript", "vim", "vimdoc",
-        "query", "elixir", "heex", "javascript", "html", "proto", "markdown",
-        "swift", "go", "rust", "sql", "gdscript", "json"
+        "c", "cpp", "rust", "go", "gdscript",
+        "lua", "vim", "vimdoc",
+        "markdown", "markdown_inline",
+        "query", "bash", "json",
       }
       require("nvim-treesitter").install(wanted)
     end,
