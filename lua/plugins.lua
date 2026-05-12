@@ -132,14 +132,6 @@ return {
     opts = {},
   },
   {
-    "S1M0N38/love2d.nvim",
-    cmd = "LoveRun",
-    opts = {},
-    keys = {
-      { "<leader>ll", ft = "lua", desc = "LÖVE" },
-    },
-  },
-  {
     "Freedzone/kerbovim"
   },
   {
