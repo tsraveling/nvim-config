@@ -46,7 +46,6 @@ if vim.fn.executable('clangd') == 1 then
       '--background-index',
       '--completion-style=detailed',
       '--header-insertion=never',
-      '--std=c++20',
     },
   })
   vim.lsp.enable('clangd')
