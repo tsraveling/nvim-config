@@ -124,82 +124,20 @@ return {
     ---@type snacks.Config
     opts = {
       bigfile = { enabled = true },
-      dim = { enabled = true },
-      indent = { enabled = true },
+      quickfile = { enabled = true },
       input = { enabled = true },
+      statuscolumn = { enabled = true },
       notifier = {
         enabled = true,
         timeout = 3000,
       },
-      quickfile = { enabled = true },
-      scroll = { enabled = true },
-      statuscolumn = { enabled = true },
+      dim = { enabled = false },
+      indent = { enabled = false },
+      scroll = { enabled = false },
       words = { enabled = false },
-      zen = {
-        toggles = {
-          dim = false,
-          git_signs = false,
-          mini_diff_signs = false,
-        },
-        enabled = true,
-        center = true,
-        on_open = function(win)
-          -- Defer so the WinEnter autocmd exists before we try to remove it
-          vim.schedule(function()
-            local aus = vim.api.nvim_get_autocmds({ group = win.augroup, event = "WinEnter" })
-            for _, au in ipairs(aus) do
-              vim.api.nvim_del_autocmd(au.id)
-            end
-          end)
-        end,
-      },
-      scratch = {
-        enabled = true,
-        ft = function()
-          if vim.bo.buftype == "" and vim.bo.filetype ~= "" then
-            return vim.bo.filetype
-          end
-          return "markdown"
-        end,
-        root = vim.fn.stdpath("data") .. "/scratch",
-        autowrite = true, -- automatically write when the buffer is hidden
-      },
-      styles = {
-        zen = {
-          width = 80
-        },
-        notification = {
-          -- wo = { wrap = true } -- Wrap notifications
-        }
-      },
-      dashboard = {
-        sections = {
-          { section = "header" },
-          {
-            pane = 2,
-            height = 5,
-            padding = 1,
-          },
-          { section = "keys", gap = 1, padding = 1 },
-          { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
-          {
-            pane = 2,
-            icon = " ",
-            title = "Git Status",
-            section = "terminal",
-            enabled = function()
-              return Snacks.git.get_root() ~= nil
-            end,
-            cmd = "git status --short --branch --renames",
-            height = 5,
-            padding = 1,
-            ttl = 5 * 60,
-            indent = 3,
-          },
-          { section = "startup" },
-        },
-      }
+      zen = { enabled = false },
+      scratch = { enabled = false },
+      dashboard = { enabled = false },
     }
   }
 }
