@@ -3,6 +3,7 @@ require("tsr.graphene")
 require("tsr.notes")
 require("tsr.set")
 require("tsr.cpp_stubs")
+require("tsr.onboard")
 
 vim.api.nvim_create_user_command('OpenTodo', function()
   vim.cmd('botright vsplit ~/notes/TODO.md')
